@@ -13,5 +13,5 @@
   - Express
   - TSOA (Typescript Open API)
   - TypeORM
-  - MySql
+  - PostgreSQL
 
