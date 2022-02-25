@@ -1,1 +1,1 @@
-# -gcc188-segrega
+# gcc188-segrega
