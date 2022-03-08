@@ -5,7 +5,7 @@
 
 #### Front End:
   - React                       v17.0.2
-  - Material UI                 v5.0
+  - Material UI                 v5.4.3
   - Typescript                  v4.6.2            
 
 #### Back End:
