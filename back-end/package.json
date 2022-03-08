@@ -1,0 +1,32 @@
+{
+  "name": "back-end-tsoa",
+  "version": "1.0.0",
+  "description": "Código base de back-end em TypeScript OpenAPI",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsoa spec-and-routes && tsc",
+    "serve": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+  },
+  "author": "CompJúnior",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "pg": "^8.7.3",
+    "reflect-metadata": "^0.1.13",
+    "swagger-ui-express": "^4.3.0",
+    "tsoa": "^3.14.1",
+    "typeorm": "^0.2.44"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.21",
+    "@types/swagger-ui-express": "^4.1.3",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.6.0",
+    "typescript": "^4.6.2"
+  }
+}

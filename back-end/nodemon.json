@@ -1,0 +1,7 @@
+{
+  "verbose": false,
+  "ignore": [".git", "node_modules/**/node_modules"],
+  "watch": ["src"],
+  "exec": "npx tsoa spec-and-routes && ts-node ./src/app.ts",
+  "ext": "js, json, ts, html, proto"
+}
