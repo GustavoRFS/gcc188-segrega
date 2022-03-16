@@ -1,4 +1,4 @@
-# gcc188-segrega
+# CompGame
 
 
 ### Tecnologias utilizadas
