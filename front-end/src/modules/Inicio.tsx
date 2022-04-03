@@ -1,8 +1,9 @@
-export default function Inicio() {
+import { TabelaProdutos } from "../shared/components";
+
+export default function Produtos() {
   return (
-    <div
-      id="KKK"
-      style={{ width: "100vw", height: "100vh", backgroundColor: "#fafa" }}
-    />
+    <div>
+      <TabelaProdutos />
+    </div>
   );
 }
