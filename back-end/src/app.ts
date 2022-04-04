@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-const port = process.env.NODE_ENV ? 5000 : 3000;
+const port = 5000;
 
 createConnection()
   .then(() => {

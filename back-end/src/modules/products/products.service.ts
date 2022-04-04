@@ -1,17 +1,18 @@
-import { Product } from "./products.model";
 import { ProductsRepository } from "./products.repository";
-import { ProductInput } from "./products.dto";
+import { ProductInput, ProductOutput } from "./products.dto";
 
 export class ProductsService {
-  public static async getProducts() {
+  public static async getProducts(): Promise<ProductOutput[]> {
     return await ProductsRepository.getProducts();
   }
 
-  public static async getProductById(id: number) {
+  public static async getProductById(id: number): Promise<ProductOutput> {
     return await ProductsRepository.getProductById(id);
   }
 
-  public static async createProduct(product: ProductInput) {
+  public static async createProduct(
+    product: ProductInput
+  ): Promise<ProductOutput> {
     const {
       raw: [{ id }],
     } = await ProductsRepository.createProduct(product);
@@ -19,7 +20,10 @@ export class ProductsService {
     return await this.getProductById(id);
   }
 
-  public static async updateProduct(id: number, product: ProductInput) {
+  public static async updateProduct(
+    id: number,
+    product: ProductInput
+  ): Promise<ProductOutput> {
     const response = await ProductsRepository.updateProduct(id, product);
 
     if (response.affected === 0) {

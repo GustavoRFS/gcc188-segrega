@@ -11,6 +11,9 @@ export class Product {
   @Column()
   price: number;
 
+  @Column({ default: true, select: false })
+  isActive: boolean;
+
   @Column()
   image?: string;
 }

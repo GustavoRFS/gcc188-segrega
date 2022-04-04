@@ -1,14 +1,16 @@
 import { Product } from "./products.model";
 import { getRepository, Repository } from "typeorm";
-import { ProductInput } from "./products.dto";
+import { ProductInput, ProductOutput } from "./products.dto";
 
 export class ProductsRepository {
-  public static async getProducts() {
+  public static async getProducts(): Promise<ProductOutput[]> {
     const repository: Repository<Product> = getRepository(Product);
-    return await repository.find();
+    return await repository.find({
+      where: { isActive: true },
+    });
   }
 
-  public static async getProductById(id: number) {
+  public static async getProductById(id: number): Promise<ProductOutput> {
     const repository: Repository<Product> = getRepository(Product);
     return await repository.findOne({ id });
   }
@@ -26,6 +28,6 @@ export class ProductsRepository {
 
   public static async deleteProduct(id: number) {
     const repository: Repository<Product> = getRepository(Product);
-    return await repository.delete({ id });
+    return await repository.update({ id }, { isActive: false });
   }
 }

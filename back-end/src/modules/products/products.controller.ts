@@ -13,14 +13,14 @@ import {
 import { Product } from "./products.model";
 import { ValidateErrorJSON } from "../../utils/types";
 import { ProductsService } from "./products.service";
-import { ProductInput } from "./products.dto";
+import { ProductInput, ProductOutput } from "./products.dto";
 
 @Route("products")
 export class ProductsController extends Controller {
   @Get()
   @SuccessResponse("200", "Sucesso")
   @Route("/")
-  public async getProducts(): Promise<Product[]> {
+  public async getProducts(): Promise<ProductOutput[]> {
     const response = await ProductsService.getProducts();
     this.setStatus(200);
     return response;
@@ -30,7 +30,7 @@ export class ProductsController extends Controller {
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
   @Route("/")
-  public async getProductById(@Path() id: number): Promise<Product> {
+  public async getProductById(@Path() id: number): Promise<ProductOutput> {
     const response = await ProductsService.getProductById(id);
     if (!response) {
       this.setStatus(404);
@@ -42,7 +42,9 @@ export class ProductsController extends Controller {
 
   @Post("/")
   @SuccessResponse("200", "Sucesso")
-  public async createProduct(@Body() product: ProductInput): Promise<Product> {
+  public async createProduct(
+    @Body() product: ProductInput
+  ): Promise<ProductOutput> {
     const response = await ProductsService.createProduct(product);
 
     this.setStatus(200);
@@ -56,7 +58,7 @@ export class ProductsController extends Controller {
   public async updateProduct(
     @Path() id: number,
     @Body() product: ProductInput
-  ): Promise<Product> {
+  ): Promise<ProductOutput> {
     const response = await ProductsService.updateProduct(id, product);
 
     if (!response) {
