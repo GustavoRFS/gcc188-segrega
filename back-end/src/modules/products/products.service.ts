@@ -19,8 +19,14 @@ export class ProductsService {
     return await this.getProductById(id);
   }
 
-  public static async updateProduct(id: number, product: Product) {
-    return await ProductsRepository.updateProduct(id, product);
+  public static async updateProduct(id: number, product: ProductInput) {
+    const response = await ProductsRepository.updateProduct(id, product);
+
+    if (response.affected === 0) {
+      return null;
+    }
+
+    return await this.getProductById(id);
   }
 
   public static async deleteProduct(id: number) {

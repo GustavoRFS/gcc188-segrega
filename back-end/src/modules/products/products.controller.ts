@@ -52,20 +52,35 @@ export class ProductsController extends Controller {
 
   @Put("/{id}")
   @SuccessResponse("200", "Sucesso")
+  @Response("404", "Não encontrado")
   public async updateProduct(
     @Path() id: number,
-    @Body() product: Product
+    @Body() product: ProductInput
   ): Promise<Product> {
     const response = await ProductsService.updateProduct(id, product);
-    this.setStatus(200);
-    return response.raw;
+
+    if (!response) {
+      this.setStatus(404);
+    } else {
+      this.setStatus(200);
+    }
+
+    return response;
   }
 
   @Delete("/{id}")
   @SuccessResponse("200", "Sucesso")
-  public async deleteProduct(@Path() id: number) {
+  @Response("404", "Não encontrado")
+  public async deleteProduct(@Path() id: number): Promise<string> {
     const response = await ProductsService.deleteProduct(id);
+
+    if (response.affected === 0) {
+      this.setStatus(404);
+      return "Produto não encontrado";
+    }
+
     this.setStatus(200);
-    return response.raw;
+
+    return "Produto removido com sucesso";
   }
 }

@@ -19,7 +19,7 @@ export class ProductsRepository {
     return await repository.insert(product);
   }
 
-  public static async updateProduct(id: number, product: Product) {
+  public static async updateProduct(id: number, product: ProductInput) {
     const repository: Repository<Product> = getRepository(Product);
     return await repository.update({ id }, product);
   }
