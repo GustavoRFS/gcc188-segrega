@@ -6,6 +6,7 @@ type TextFieldProps = {
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   onSubmit?: FormEventHandler<HTMLDivElement>;
   type?: "number" | "email" | "password";
+  defaultValue?: "String";
   style?: CSSProperties;
 };
 
@@ -15,6 +16,7 @@ export default function CustomTextField({
   type,
   style,
   onSubmit,
+  defaultValue
 }: TextFieldProps) {
   return (
     <TextField
@@ -22,6 +24,7 @@ export default function CustomTextField({
       label={label}
       onChange={onChange}
       onSubmit={onSubmit}
+      defaultValue={defaultValue}
       type={type}
       size="small"
     />

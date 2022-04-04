@@ -30,7 +30,7 @@ export default function CustomizedDialogs(props: any) {
             }
           }}
         >
-          <CloseIcon />
+            <CloseIcon fontSize='small'/>
         </IconButton>
         <DialogContent style={ { background: "#fff" }}>
             {children}
