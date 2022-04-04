@@ -3,6 +3,9 @@ import { createConnection } from "typeorm";
 import express, { Response, Request } from "express";
 import bodyParser from "body-parser";
 import { RegisterRoutes } from "../build/routes";
+import { createUploadsFolder } from "./utils/createUploadsFolder";
+
+createUploadsFolder();
 
 const app = express();
 
