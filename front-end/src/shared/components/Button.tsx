@@ -9,7 +9,7 @@ type ButtonProps = {
   style?: CSSProperties;
 };
 
-export default function CustomButton({
+export function CustomButton({
   children,
   color,
   variant,
