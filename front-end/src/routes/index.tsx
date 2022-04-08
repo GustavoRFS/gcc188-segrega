@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { getToken } from "../services/tokens";
 import { Switch, Route, useHistory } from "react-router-dom";
 import Login from "../modules/Login";
-import Inicio from "../modules/Inicio";
+import { Inicio } from "../modules/Inicio";
 import NavBar from "../shared/components/NavBar";
 import api from "../services/api";
 import { useAppContext } from "../shared/store";
+import { Perfil } from "../modules/Perfil";
+import { Admin } from "../modules/Admin";
 
 const AuthRoutes = () => {
   return (
@@ -22,6 +24,8 @@ const AppRoutes = () => {
       <NavBar />
       <Switch>
         <Route path="/inicio" component={Inicio} />
+        <Route path="/perfil" component={Perfil} />
+        <Route path="/admin" component={Admin} />
       </Switch>
     </>
   );

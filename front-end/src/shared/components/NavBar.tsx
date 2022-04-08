@@ -1,8 +1,7 @@
 import { AppBar, Box, Container, Toolbar, Tabs, Tab } from "@mui/material";
-import { useState, useEffect } from "react";
-import Button from "./Button";
+import { useState } from "react";
+import { Button } from "./index";
 import Logo from "../../assets/Logo.svg";
-import { setToken } from "../../services/tokens";
 import { useHistory } from "react-router-dom";
 import { useAppContext } from "../store";
 
