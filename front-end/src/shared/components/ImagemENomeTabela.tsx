@@ -2,15 +2,17 @@ import { Avatar } from "@mui/material";
 import Photo from "@mui/icons-material/Photo";
 
 type TableRowWithImageAndNameProps = {
-  image?: string;
-  name: string;
+  imagem?: string;
+  nome: string;
   onClick: React.MouseEventHandler<HTMLDivElement>;
+  imagemPadrao?: "Usuário" | "Foto";
 };
 
-export function TableRowWithImageAndName({
-  image,
-  name,
+export function ImagemENomeTabela({
+  imagem,
+  nome,
   onClick,
+  imagemPadrao,
 }: TableRowWithImageAndNameProps) {
   return (
     <div
@@ -23,13 +25,13 @@ export function TableRowWithImageAndName({
       onClick={onClick}
     >
       <Avatar
-        alt={`Imagem de ${name}`}
-        src={image}
+        alt={`Imagem de ${nome}`}
+        src={imagem}
         style={{ marginRight: 6, width: 30, height: 30 }}
       >
-        <Photo />
+        {imagemPadrao === "Foto" ? <Photo /> : null}
       </Avatar>
-      <p>{name}</p>
+      <p>{nome}</p>
     </div>
   );
 }
