@@ -1,7 +1,7 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import ModalProduto from "../../../shared/components/ModalProduto";
-import { TableRowWithImageAndName } from "../../../shared/components/TableRowWithImageAndName";
+import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
 export function TabelaPedidos() {
   const [open, setOpen] = React.useState(false);
@@ -22,22 +22,35 @@ export function TabelaPedidos() {
       width: 260,
 
       renderCell: ({ row }) => (
-        <TableRowWithImageAndName
-          image={row.imagem}
-          name={row.nome}
+        <ImagemENomeTabela
+          imagem={row.imagem}
+          nome={row.nome}
+          imagemPadrao="Foto"
           onClick={() => {
             handleClickOpen();
           }}
         />
       ),
     },
-    { field: "preco", headerName: "Valor da Compra", width: 160 },
-    { field: "data", headerName: "Data da Compra", width: 160 },
+    {
+      field: "preco",
+      headerName: "Valor da Compra",
+      width: 160,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "data",
+      headerName: "Data da Compra",
+      headerAlign: "center",
+      align: "center",
+      width: 160,
+    },
   ];
   const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: 900, data: "03/04/2022" },
-    { id: 2, nome: "Amazon Alexa", preco: 1000, data: "07/04/2022" },
-    { id: 3, nome: "Mouse Logitech", preco: 400, data: "01/04/2023" },
+    { id: 1, nome: "Amazon Kindle", preco: "900 CPs", data: "03/04/2022" },
+    { id: 2, nome: "Amazon Alexa", preco: "1000 CPs", data: "07/04/2022" },
+    { id: 3, nome: "Mouse Logitech", preco: "400 CPs", data: "01/04/2023" },
   ];
   return (
     <div style={{ height: 213.2 }}>

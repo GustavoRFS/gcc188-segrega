@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import ModalProduto from "../../../shared/components/ModalProduto";
-import { TableRowWithImageAndName } from "../../../shared/components/TableRowWithImageAndName";
+import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
 export function TabelaProdutos() {
   const [open, setOpen] = React.useState(false);
@@ -23,18 +23,24 @@ export function TabelaProdutos() {
       field: "nome",
       headerName: "Produto",
       width: 300,
-
       renderCell: ({ row }) => (
-        <TableRowWithImageAndName
-          image={row.imagem}
-          name={row.nome}
+        <ImagemENomeTabela
+          imagem={row.imagem}
+          nome={row.nome}
+          imagemPadrao="Foto"
           onClick={() => {
             console.log(row);
           }}
         />
       ),
     },
-    { field: "preco", headerName: "Preço", width: 100 },
+    {
+      field: "preco",
+      headerName: "Preço",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "buttons",
       headerName: "+",
@@ -83,9 +89,9 @@ export function TabelaProdutos() {
   }
 
   const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: 900 },
-    { id: 2, nome: "Amazon Alexa", preco: 1000 },
-    { id: 3, nome: "Mouse Logitech", preco: 400 },
+    { id: 1, nome: "Amazon Kindle", preco: "900 CPs" },
+    { id: 2, nome: "Amazon Alexa", preco: "1000 CPs" },
+    { id: 3, nome: "Mouse Logitech", preco: "400 CPs" },
   ];
   return (
     <div>
