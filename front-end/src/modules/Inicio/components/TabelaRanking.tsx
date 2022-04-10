@@ -21,7 +21,7 @@ export function TabelaRanking() {
     {
       field: "nome",
       headerName: "Membro",
-      width: 200,
+      width: 280,
       sortable: false,
       renderCell: ({ row }) => (
         <ImagemENomeTabela
@@ -68,7 +68,14 @@ export function TabelaRanking() {
     },
   ];
   return (
-    <div>
+    <div
+      style={{
+        height: "100%",
+        width: 512,
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
       <DataGrid
         rows={rows}
         columns={columns}
@@ -76,6 +83,7 @@ export function TabelaRanking() {
         rowHeight={40}
         autoHeight
         disableColumnMenu
+        sx={{ overflow: "none" }}
       />
     </div>
   );

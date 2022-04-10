@@ -23,7 +23,7 @@ export default function NavBar() {
   const { dispatch } = useAppContext();
 
   return (
-    <AppBar position="sticky" color="transparent">
+    <AppBar position="sticky" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img src={Logo} alt="Logo" style={{ height: 50, marginRight: 10 }} />
