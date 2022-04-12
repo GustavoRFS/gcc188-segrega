@@ -1,9 +1,9 @@
-import PerfilComponent from "../shared/components/PerfilComponent";
+import { PerfilComponent } from "../shared/components/PerfilComponent";
 
-export default function Perfil() {
+export function Perfil() {
   return (
     <div>
-      <PerfilComponent/>  
+      <PerfilComponent />
     </div>
   );
 }

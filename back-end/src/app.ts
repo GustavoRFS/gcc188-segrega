@@ -3,6 +3,9 @@ import { createConnection } from "typeorm";
 import express, { Response, Request } from "express";
 import bodyParser from "body-parser";
 import { RegisterRoutes } from "../build/routes";
+import { createUploadsFolder } from "./utils/createUploadsFolder";
+
+createUploadsFolder();
 
 const app = express();
 
@@ -22,7 +25,7 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-const port = process.env.NODE_ENV ? 5000 : 3000;
+const port = 5000;
 
 createConnection()
   .then(() => {

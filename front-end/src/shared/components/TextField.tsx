@@ -10,13 +10,13 @@ type TextFieldProps = {
   style?: CSSProperties;
 };
 
-export default function CustomTextField({
+export function CustomTextField({
   label,
   onChange,
   type,
   style,
   onSubmit,
-  defaultValue
+  defaultValue,
 }: TextFieldProps) {
   return (
     <TextField

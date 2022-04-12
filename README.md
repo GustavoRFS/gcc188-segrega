@@ -1,7 +1,11 @@
 # CompGame
 
+## Visão Geral
+**Nome do Projeto:** CompGame
 
-### Tecnologias utilizadas
+**Descrição:** Este é um sistema de gamificação para a CompJúnior. Neste sistema, um administrador pode gerenciar membros, adicionar moedas (Internas do sistema) na carteira dos membros e gerenciar produtos. Os membros, por outro lado, utilizarão as moedas recebidas para fazer pedidos de produtos. Seu objetivo é aumentar o engajamento dos membros a partir de uma plataforma de fácil uso.
+
+## Tecnologias utilizadas
 
 #### Front End:
   - React                       v17.0.2
@@ -15,8 +19,3 @@
   - TypeORM                     v0.2.44
   - PostgreSQL                  v14
 
-### Projeto
-#### Visão Geral
-**Nome do Projeto:** CompGame
-
-**Descrição:** Este é um sistema de gamificação para a CompJúnior. Neste sistema, um administrador pode gerenciar membros, adicionar moedas (Internas do sistema) na carteira dos membros e gerenciar produtos. Os membros, por outro lado, utilizarão as moedas recebidas para fazer pedidos de produtos.

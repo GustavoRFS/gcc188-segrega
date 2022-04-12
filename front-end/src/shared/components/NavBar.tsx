@@ -1,8 +1,7 @@
 import { AppBar, Box, Container, Toolbar, Tabs, Tab } from "@mui/material";
-import { useState, useEffect } from "react";
-import Button from "./Button";
+import { useState } from "react";
+import { Button } from "./index";
 import Logo from "../../assets/Logo.svg";
-import { setToken } from "../../services/tokens";
 import { useHistory } from "react-router-dom";
 import { useAppContext } from "../store";
 
@@ -24,7 +23,7 @@ export default function NavBar() {
   const { dispatch } = useAppContext();
 
   return (
-    <AppBar position="sticky" color="transparent">
+    <AppBar position="sticky" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img src={Logo} alt="Logo" style={{ height: 50, marginRight: 10 }} />
