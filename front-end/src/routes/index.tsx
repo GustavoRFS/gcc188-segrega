@@ -6,6 +6,7 @@ import Inicio from "../modules/Inicio";
 import NavBar from "../shared/components/NavBar";
 import api from "../services/api";
 import { useAppContext } from "../shared/store";
+import Perfil from "../modules/Perfil";
 
 const AuthRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
       <NavBar />
       <Switch>
         <Route path="/inicio" component={Inicio} />
+        <Route path="/perfil" component={Perfil} />
       </Switch>
     </>
   );
