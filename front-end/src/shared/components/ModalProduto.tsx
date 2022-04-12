@@ -1,7 +1,8 @@
 import { ModalPadrao } from "./ModalPadrao";
 import CategoryIcon from "@mui/icons-material/Category";
 import { Button, TextField } from ".";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
+import { ModalConfirmacao } from "./ModalConfirmacao";
 
 type ModalProdutoProps = {
   onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
@@ -11,6 +12,8 @@ type ModalProdutoProps = {
 
 export default function ModalProduto(props: ModalProdutoProps) {
   const { onClose, open, produto } = props;
+
+  const [modalConfirmacaoOpened, setModalConfirmacaoOpened] = useState(false);
 
   const isAdd = !produto;
   const isAdmin = false; //TODO: Aqui vai ter a verificação
@@ -27,11 +30,28 @@ export default function ModalProduto(props: ModalProdutoProps) {
   }
 
   function resgatarItem() {
-    alert(JSON.stringify({ nome, preco }));
+    abrirModalConfirmacao();
   }
 
+  const fecharModalConfirmacao = () => {
+    setModalConfirmacaoOpened(false);
+  };
+
+  const abrirModalConfirmacao = () => {
+    setModalConfirmacaoOpened(true);
+  };
+
   return (
-    <div>
+    <>
+      <ModalConfirmacao
+        onClose={fecharModalConfirmacao}
+        open={modalConfirmacaoOpened}
+        textoAcao="KKKKKK"
+        textoConfirmacao="Resgatar"
+        acao={() => {
+          alert("KKKK");
+        }}
+      />
       <ModalPadrao onClose={onClose} open={open}>
         <div
           style={{
@@ -115,6 +135,6 @@ export default function ModalProduto(props: ModalProdutoProps) {
           )}
         </div>
       </ModalPadrao>
-    </div>
+    </>
   );
 }
