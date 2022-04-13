@@ -53,7 +53,7 @@ export function TabelaPedidos() {
     { id: 3, nome: "Mouse Logitech", preco: "400 CPs", data: "01/04/2023" },
   ];
   return (
-    <div style={{ height: 213.2 }}>
+    <div style={{flex: 1, alignSelf: "flex-start",   }}>
       <DataGrid
         rows={rows}
         columns={columns}
