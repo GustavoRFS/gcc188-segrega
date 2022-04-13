@@ -1,20 +1,39 @@
-// src/users/usersService.ts
-import { User } from "./user.model";
-import { getRepository, Like } from "typeorm";
+import { UsersRepository } from "./user.repository";
+import { UserInput, UserOutput } from "./user.dto";
 
-export const getUsers = async (name?: string): Promise<User[]> => {
-  const userRepository = getRepository(User);
-
-  if (name) {
-    return await userRepository.find({
-      where: { firstName: Like(`%${name}%`) },
-    });
-  } else {
-    return await userRepository.find();
+export class UsersService {
+  public static async getUsers(): Promise<UserOutput[]> {
+    return await UsersRepository.getUsers();
   }
-};
 
-export const createUser = async (user: User): Promise<void> => {
-  const userRepository = getRepository(User);
-  await userRepository.insert(user);
-};
+  public static async getUserById(id: number): Promise<UserOutput> {
+    return await UsersRepository.getUserById(id);
+  }
+
+  public static async createUser(
+    User: UserInput
+  ): Promise<UserOutput> {
+    const {
+      raw: [{ id }],
+    } = await UsersRepository.createUser(User);
+
+    return await this.getUserById(id);
+  }
+
+  public static async updateUser(
+    id: number,
+    user: UserInput
+  ): Promise<UserOutput> {
+    const response = await UsersRepository.updateUser(id, user);
+
+    if (response.affected === 0) {
+      return null;
+    }
+
+    return await this.getUserById(id);
+  }
+
+  public static async deleteUser(id: number) {
+    return await UsersRepository.deleteUser(id);
+  }
+}
