@@ -60,7 +60,7 @@ export function ListaProdutos() {
           width: 512,
           maxWidth: "98vw",
         }}
-        onClick={handleOpen}
+        
       >
         <ImageList
           ref={ref}
@@ -79,6 +79,7 @@ export function ListaProdutos() {
                 marginBottom: 6,
               }}
               key={produto.id}
+              onClick={handleOpen}
             >
               <img
                 style={{ width: 150, marginBottom: 14 }}

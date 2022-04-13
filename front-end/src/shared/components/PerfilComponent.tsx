@@ -40,17 +40,6 @@ const Pontos = styled("h3")({
 export function PerfilComponent() {
   return (
     <div>
-      <h2
-        style={{
-          fontFamily: "Roboto",
-          fontStyle: "normal",
-          fontWeight: 400,
-          fontSize: 24,
-          color: "#2B2D42",
-        }}
-      >
-        Perfil
-      </h2>
       <Item elevation={5}>
         <Avatar
           alt="Remy Sharp"
