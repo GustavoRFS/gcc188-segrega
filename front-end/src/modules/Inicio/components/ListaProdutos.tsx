@@ -60,7 +60,7 @@ export function ListaProdutos() {
           width: 512,
           maxWidth: "98vw",
         }}
-        
+        elevation={5}
       >
         <ImageList
           ref={ref}
