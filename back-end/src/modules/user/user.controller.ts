@@ -10,10 +10,8 @@ import {
   SuccessResponse,
   Delete,
 } from "tsoa";
-import { User } from "./user.model";
-import { ValidateErrorJSON } from "../../utils/types";
 import { UsersService } from "./user.service";
-import { UserInput, UserOutput } from "./user.dto";
+import { UserInput, UserOutput, UserLogin, UserLoginOutput } from "./user.dto";
 
 @Route("users")
 export class UsersController extends Controller {
@@ -40,7 +38,20 @@ export class UsersController extends Controller {
     return response;
   }
 
-  @Post("/")
+  @Post("/login")
+  @SuccessResponse("200", "Sucesso")
+  @Response("400", "Não encontrado")
+  public async login(
+    @Body() user: UserLogin
+  ): Promise<UserLoginOutput> {
+    const response = await UsersService.login(user);
+
+    this.setStatus(200);
+
+    return response;
+  }
+
+  @Post("/register")
   @SuccessResponse("200", "Sucesso")
   public async createUser(
     @Body() user: UserInput

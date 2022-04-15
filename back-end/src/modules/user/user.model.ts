@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import bcrypt from 'bcryptjs';
 
 @Entity()
 export class User {
@@ -19,5 +20,15 @@ export class User {
 
   @Column()
   email: string;
+
+  @Column({
+    default: 'user'
+  })
+  nivel: string;
+
+  @BeforeInsert()
+  equalsTotalPoints() {
+    this.totalPoints = this.points
+  }
 
 }

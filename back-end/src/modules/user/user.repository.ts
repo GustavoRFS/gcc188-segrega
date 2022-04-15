@@ -1,6 +1,6 @@
 import { User } from "./user.model";
 import { getRepository, Repository } from "typeorm";
-import { UserInput, UserOutput } from "./user.dto";
+import { UserEmailOutput, UserInput, UserLoginOutput, UserOutput } from "./user.dto";
 
 export class UsersRepository {
   public static async getUsers(): Promise<UserOutput[]> {
@@ -13,13 +13,17 @@ export class UsersRepository {
     return await repository.findOne({ id });
   }
 
-  public static async createUser(User: UserInput) {
+  public static async getUserByEmail(email: string): Promise<UserEmailOutput> {
     const repository: Repository<User> = getRepository(User);
-
-    return await repository.insert(User);
+    return await repository.findOne({ email }, { select: ['id', 'password', 'email'] });
   }
 
-  public static async updateUser(id: number, User: UserInput) {
+  public static async createUser(user: any) { //todo
+    const repository: Repository<User> = getRepository(User);
+    return await repository.insert(user);
+  }
+
+  public static async updateUser(id: number, User: any) { //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.update({ id }, User);
   }
