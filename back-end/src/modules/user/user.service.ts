@@ -2,15 +2,14 @@ import { UsersRepository } from "./user.repository";
 import { UserInput, UserLogin, UserLoginOutput, UserOutput } from "./user.dto";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const secret = '93976860180622E966EC29368E74137FE78E79F388E52351A83A3C29AE91F622';
+import authConfig from '../../utils/auth'
 export class UsersService {
   public static async getUsers(): Promise<UserOutput[]> {
     return await UsersRepository.getUsers();
   }
 
   public static generateToken(params) {
-    return jwt.sign(params, secret, { expiresIn: 86400 });
+    return jwt.sign(params, authConfig.secret, { expiresIn: 86400 });
   };
 
   public static async getUserById(id: number): Promise<UserOutput> {
@@ -45,7 +44,6 @@ export class UsersService {
         uid: userResponse.id,
         email: userResponse.email,
         nivel: userResponse.nivel,
-        name: userResponse.name,
       });
       return { token, tokenExpiration: '1d' };
     }

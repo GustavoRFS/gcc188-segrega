@@ -15,7 +15,7 @@ export class UsersRepository {
 
   public static async getUserByEmail(email: string): Promise<UserEmailOutput> {
     const repository: Repository<User> = getRepository(User);
-    return await repository.findOne({ email }, { select: ['id', 'password', 'email'] });
+    return await repository.findOne({ email }, { select: ['id', 'password', 'email', 'nivel'] });
   }
 
   public static async createUser(user: any) { //todo

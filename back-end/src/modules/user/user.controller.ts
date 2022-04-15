@@ -9,6 +9,8 @@ import {
   Response,
   SuccessResponse,
   Delete,
+  Request,
+  Security,
 } from "tsoa";
 import { UsersService } from "./user.service";
 import { UserInput, UserOutput, UserLogin, UserLoginOutput } from "./user.dto";
@@ -17,8 +19,9 @@ import { UserInput, UserOutput, UserLogin, UserLoginOutput } from "./user.dto";
 export class UsersController extends Controller {
   @Get()
   @SuccessResponse("200", "Sucesso")
+  @Security("jwt", ["admin"])
   @Route("/")
-  public async getUsers(): Promise<UserOutput[]> {
+  public async getUsers(@Request() a: any): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();
     this.setStatus(200);
     return response;

@@ -1,7 +1,10 @@
 {
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/**/*.controller.ts", "src/**/*Controller.ts"],
+  "controllerPathGlobs": [
+    "src/**/*.controller.ts",
+    "src/**/*Controller.ts"
+  ],
   "spec": {
     "basePath": "/api",
     "outputDirectory": "build",
@@ -9,6 +12,7 @@
   },
   "routes": {
     "basePath": "/api",
-    "routesDir": "build"
+    "routesDir": "build",
+    "authenticationModule": "./src/middlewares/authentication.ts"
   }
 }
