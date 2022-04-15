@@ -37,5 +37,5 @@ createConnection()
     });
   })
   .catch((err) => {
-    throw new Error("Não foi possível conectar ao Banco de dados");
+    throw new Error("Não foi possível conectar ao Banco de dados " + err);
   });
