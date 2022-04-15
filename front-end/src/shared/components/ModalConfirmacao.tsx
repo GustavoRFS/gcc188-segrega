@@ -8,21 +8,44 @@ type ModalConfirmacaoProps = {
   open: boolean;
   textoAcao: string;
   textoConfirmacao: string;
-  acao: Function;
+  acao: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 };
 
 export function ModalConfirmacao({
   onClose,
   open,
   textoAcao,
+  textoConfirmacao,
   acao,
 }: ModalConfirmacaoProps) {
   return (
     <ModalPadrao onClose={onClose} open={open}>
-      <Typography variant="body1">{textoAcao}</Typography>
-      <Button variant="contained" color="secondary">
-        Cancelar
-      </Button>
+      <div
+        style={{
+          width: 400,
+          flexDirection: "column",
+          alignItems: "center",
+          display: "flex",
+          paddingTop: 7,
+        }}
+      >
+        <Typography variant="body1">{textoAcao}</Typography>
+        <div
+          style={{
+            width: "65%",
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginTop: 20,
+          }}
+        >
+          <Button onClick={onClose} variant="contained" color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={acao} variant="contained">
+            {textoConfirmacao}
+          </Button>
+        </div>
+      </div>
     </ModalPadrao>
   );
 }
