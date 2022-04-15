@@ -9,11 +9,14 @@ import {
   Response,
   SuccessResponse,
   Delete,
+  FormField,
+  UploadedFile,
 } from "tsoa";
 import { Product } from "./products.model";
 import { ValidateErrorJSON } from "../../utils/types";
 import { ProductsService } from "./products.service";
 import { ProductInput, ProductOutput } from "./products.dto";
+import { saveFile } from "../../utils/files";
 
 @Route("products")
 export class ProductsController extends Controller {
@@ -43,9 +46,17 @@ export class ProductsController extends Controller {
   @Post("/")
   @SuccessResponse("200", "Sucesso")
   public async createProduct(
-    @Body() product: ProductInput
+    @FormField() name: string,
+    @FormField() price: number,
+    @UploadedFile() file: Express.Multer.File
   ): Promise<ProductOutput> {
-    const response = await ProductsService.createProduct(product);
+    await saveFile(file.buffer, file.originalname);
+
+    const response = await ProductsService.createProduct({
+      name,
+      price,
+      image: file?.originalname,
+    });
 
     this.setStatus(200);
 
@@ -57,9 +68,15 @@ export class ProductsController extends Controller {
   @Response("404", "Não encontrado")
   public async updateProduct(
     @Path() id: number,
-    @Body() product: ProductInput
+    @FormField() name?: string,
+    @FormField() price?: number,
+    @UploadedFile() file?: Express.Multer.File
   ): Promise<ProductOutput> {
-    const response = await ProductsService.updateProduct(id, product);
+    const response = await ProductsService.updateProduct(id, {
+      name,
+      price,
+      image: file?.originalname,
+    });
 
     if (!response) {
       this.setStatus(404);
