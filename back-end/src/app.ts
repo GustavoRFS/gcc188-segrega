@@ -17,7 +17,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use("/uploads", filesRouter);
+app.use("/api/uploads", filesRouter);
 
 RegisterRoutes(app);
 
