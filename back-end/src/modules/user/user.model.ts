@@ -15,8 +15,11 @@ export class User {
   @Column()
   totalPoints: number;
 
-  @Column({ select: false })
-  password: string;
+  @Column({
+    select: false,
+    nullable: true
+  })
+  password!: string;
 
   @Column()
   email: string;
@@ -25,6 +28,12 @@ export class User {
     default: 'user'
   })
   nivel: string;
+
+  @Column({
+    nullable: true,
+    select: false
+  })
+  registerToken!: string;
 
   @BeforeInsert()
   equalsTotalPoints() {

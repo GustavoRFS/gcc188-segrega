@@ -13,7 +13,7 @@ import {
   Security,
 } from "tsoa";
 import { UsersService } from "./user.service";
-import { UserInput, UserOutput, UserLogin, UserLoginOutput } from "./user.dto";
+import { UserInput, UserOutput, UserLogin, UserLoginOutput, UserConfirm, UserConfirmOutput } from "./user.dto";
 
 @Route("users")
 export class UsersController extends Controller {
@@ -21,7 +21,7 @@ export class UsersController extends Controller {
   @SuccessResponse("200", "Sucesso")
   @Security("jwt", ["admin"])
   @Route("/")
-  public async getUsers(@Request() a: any): Promise<UserOutput[]> {
+  public async getUsers(): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();
     this.setStatus(200);
     return response;
@@ -30,6 +30,7 @@ export class UsersController extends Controller {
   @Get("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
+  @Security("jwt", ["admin"])
   @Route("/")
   public async getUserById(@Path() id: number): Promise<UserOutput> {
     const response = await UsersService.getUserById(id);
@@ -56,7 +57,8 @@ export class UsersController extends Controller {
 
   @Post("/register")
   @SuccessResponse("200", "Sucesso")
-  public async createUser(
+  @Security("jwt", ["admin"])
+  public async createUserAndSendMail(
     @Body() user: UserInput
   ): Promise<UserOutput> {
     const response = await UsersService.createUser(user);
@@ -66,9 +68,23 @@ export class UsersController extends Controller {
     return response;
   }
 
+  @Post("/confirm-user/{registerToken}")
+  @SuccessResponse("200", "Sucesso")
+  public async confirmUser(
+    @Path() registerToken: string,
+    @Body() password: UserConfirm
+  ): Promise<UserConfirmOutput> {
+    const response = await UsersService.confirmUser(registerToken, password.password);
+
+    this.setStatus(200);
+
+    return { id: response.id };
+  }
+
   @Put("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
+  @Security("jwt", ["admin"])
   public async updateUser(
     @Path() id: number,
     @Body() user: UserInput
@@ -86,17 +102,18 @@ export class UsersController extends Controller {
 
   @Delete("/{id}")
   @SuccessResponse("200", "Sucesso")
+  @Security("jwt", ["admin"])
   @Response("404", "Não encontrado")
   public async deleteUser(@Path() id: number): Promise<string> {
     const response = await UsersService.deleteUser(id);
 
     if (response.affected === 0) {
       this.setStatus(404);
-      return "Produto não encontrado";
+      return "Usuário não encontrado";
     }
 
     this.setStatus(200);
 
-    return "Produto removido com sucesso";
+    return "Usuário removido com sucesso";
   }
 }

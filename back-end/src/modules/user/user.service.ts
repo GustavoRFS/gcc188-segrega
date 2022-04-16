@@ -1,8 +1,12 @@
 import { UsersRepository } from "./user.repository";
-import { UserInput, UserLogin, UserLoginOutput, UserOutput } from "./user.dto";
+import { User, UserInput, UserLogin, UserLoginOutput, UserOutput } from "./user.dto";
+import authConfig from '../../config/auth'
+import urls from '../../config/urls'
+import Mailer from '../../utils/Mailer';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import authConfig from '../../utils/auth'
+import crypto from 'crypto';
+
 export class UsersService {
   public static async getUsers(): Promise<UserOutput[]> {
     return await UsersRepository.getUsers();
@@ -20,14 +24,34 @@ export class UsersService {
     return await UsersRepository.getUserByEmail(email);
   }
 
+  public static async getUserByToken(registerToken: string): Promise<User> {
+    return await UsersRepository.getUserByToken(registerToken);
+  }
+
   public static async createUser(
     user: UserInput
   ): Promise<UserOutput> {
-    user.password = bcrypt.hashSync(user.password, 10)
+    const registerToken = crypto.randomBytes(20).toString('hex');
     const {
       raw: [{ id }],
-    } = await UsersRepository.createUser(user);
-
+    } = await UsersRepository.createUser(Object.assign(user, { registerToken }));
+    const link = `${urls.frontUrl}/confirm-register/${registerToken}`
+    Mailer.sendMail(
+      {
+        to: user.email,
+        from: 'CompGame',
+        template: 'confirmEmail',
+        context: { link },
+        subject: 'Confirme seu cadastro',
+      },
+      (error) => {
+        if (error) {
+          console.error('Erro ao enviar email', error);
+        } else {
+          console.log('Email enviado com sucesso: ', user.email)
+        }
+      },
+    );
     return await this.getUserById(id);
   }
 
@@ -65,5 +89,17 @@ export class UsersService {
 
   public static async deleteUser(id: number) {
     return await UsersRepository.deleteUser(id);
+  }
+
+  public static async confirmUser(registerToken: string, password: string): Promise<UserOutput> {
+    const response = await this.getUserByToken(registerToken)
+    if (!response) {
+      throw new Error("Token inválido");
+    }
+    password = bcrypt.hashSync(password, 10)
+    response.registerToken = null
+    const u = await UsersRepository.updateUser(response.id, Object.assign(response, { password }));
+
+    return response
   }
 }
