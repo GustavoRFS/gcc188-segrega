@@ -21,7 +21,7 @@ export class UsersController extends Controller {
   @SuccessResponse("200", "Sucesso")
   @Security("jwt", ["admin"])
   @Route("/")
-  public async getUsers(@Request() a: any): Promise<UserOutput[]> {
+  public async getUsers(): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();
     this.setStatus(200);
     return response;
@@ -30,6 +30,7 @@ export class UsersController extends Controller {
   @Get("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
+  @Security("jwt", ["admin"])
   @Route("/")
   public async getUserById(@Path() id: number): Promise<UserOutput> {
     const response = await UsersService.getUserById(id);
@@ -54,9 +55,15 @@ export class UsersController extends Controller {
     return response;
   }
 
-  @Post("/register")
+  //todo: fazer rota para apos o usuario receber email para receber a senha
+  //todo: setar registerToken
+  //todo: comparar o register token
+  //todo: atualizar dto
+  //todo: enviar email
+  @Post("/send-mail")
   @SuccessResponse("200", "Sucesso")
-  public async createUser(
+  @Security("jwt", ["admin"])
+  public async createUserAndSendMail(
     @Body() user: UserInput
   ): Promise<UserOutput> {
     const response = await UsersService.createUser(user);
@@ -66,9 +73,23 @@ export class UsersController extends Controller {
     return response;
   }
 
+  @Post("/confirm/{registerToken}")
+  @SuccessResponse("200", "Sucesso")
+  public async confirmUser(
+    @Path() registerToken: string,
+    @Body() password: string
+  ): Promise<UserOutput> {
+    const response = await UsersService.confirmUser(registerToken, password);
+
+    this.setStatus(200);
+
+    return response;
+  }
+
   @Put("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
+  @Security("jwt", ["admin"])
   public async updateUser(
     @Path() id: number,
     @Body() user: UserInput
@@ -86,17 +107,18 @@ export class UsersController extends Controller {
 
   @Delete("/{id}")
   @SuccessResponse("200", "Sucesso")
+  @Security("jwt", ["admin"])
   @Response("404", "Não encontrado")
   public async deleteUser(@Path() id: number): Promise<string> {
     const response = await UsersService.deleteUser(id);
 
     if (response.affected === 0) {
       this.setStatus(404);
-      return "Produto não encontrado";
+      return "Usuário não encontrado";
     }
 
     this.setStatus(200);
 
-    return "Produto removido com sucesso";
+    return "Usuário removido com sucesso";
   }
 }

@@ -8,7 +8,6 @@ export type UserInput = {
   email: string;
   points: number;
   totalPoints: number;
-  password: string;
 };
 
 export type UserOutput = {
@@ -30,8 +29,18 @@ export type UserEmailOutput = {
   password: string;
 };
 
-
 export type UserLoginOutput = {
   token: string;
   tokenExpiration: string;
 };
+
+export type User = {
+  id: number;
+  name: string;
+  points: number;
+  totalPoints: number;
+  email: string;
+  nivel: string;
+  password: string;
+  registerToken: string;
+}

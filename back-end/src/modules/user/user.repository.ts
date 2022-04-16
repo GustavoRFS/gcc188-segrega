@@ -18,14 +18,19 @@ export class UsersRepository {
     return await repository.findOne({ email }, { select: ['id', 'password', 'email', 'nivel'] });
   }
 
+  public static async getUserByToken(registerToken: string): Promise<User> {
+    const repository: Repository<User> = getRepository(User);
+    return await repository.findOne({ registerToken }, { select: ['id'] });
+  }
+
   public static async createUser(user: any) { //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.insert(user);
   }
 
-  public static async updateUser(id: number, User: any) { //todo
+  public static async updateUser(id: number, user: any) { //todo
     const repository: Repository<User> = getRepository(User);
-    return await repository.update({ id }, User);
+    return await repository.update({ id }, user);
   }
 
   public static async deleteUser(id: number) {

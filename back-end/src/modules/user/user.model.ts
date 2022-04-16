@@ -26,6 +26,12 @@ export class User {
   })
   nivel: string;
 
+  @Column({
+    nullable: true,
+    select: false
+  })
+  registerToken!: string;
+
   @BeforeInsert()
   equalsTotalPoints() {
     this.totalPoints = this.points
