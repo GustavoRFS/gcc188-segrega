@@ -2,12 +2,12 @@ import { ModalPadrao } from "./ModalPadrao";
 import { Button, TextField } from ".";
 import { MouseEventHandler } from "react";
 
-type ModalProdutoProps = {
+type ModalAdcMoedasProps = {
   onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
   open: boolean;
 };
 
-export default function ModalProduto(props: ModalProdutoProps) {
+export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
   const { onClose, open } = props;
 
   return (
@@ -35,7 +35,7 @@ export default function ModalProduto(props: ModalProdutoProps) {
           >
             Digite quantas moedas deseja adicionar para Gustavo Ribeiro
           </h1>
-          <TextField label="Número de Moedas"></TextField>
+          <TextField type="number" label="Número de Moedas"></TextField>
           <div
             style={{
               display: "flex",
@@ -51,11 +51,16 @@ export default function ModalProduto(props: ModalProdutoProps) {
                 marginRight: 20,
                 width: 165,
               }}
+              onClick={onClose}
             >
               {" "}
               Cancelar{" "}
             </Button>
-            <Button variant="contained" style={{ width: 165,  }}>
+            <Button
+              variant="contained"
+              style={{ width: 165 }}
+              onClick={onClose}
+            >
               {" "}
               Adicionar moedas{" "}
             </Button>
