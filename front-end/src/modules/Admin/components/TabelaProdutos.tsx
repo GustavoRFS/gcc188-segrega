@@ -94,7 +94,12 @@ export function TabelaProdutos() {
     { id: 3, nome: "Mouse Logitech", preco: "400 CPs" },
   ];
   return (
-    <div style={{height: "100%", width: "100%"}}>
+    <div style={{
+      height: "100%",
+      width: 512,
+      display: "flex",
+      justifyContent: "center",
+    }}>
       <DataGrid
         rows={rows}
         columns={columns}

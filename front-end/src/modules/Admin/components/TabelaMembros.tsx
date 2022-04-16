@@ -1,25 +1,35 @@
+import { useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import AddIcon from "@mui/icons-material/Add";
+import { ModalUsuario } from "../../../shared/components/ModalUsuario";
 
 export function TabelaMembros() {
   const addItem = () => {
 
   }
-    
+  const [modalOpened, setModalOpened] = useState(false);
+
+  const handleClose = () => {
+    setModalOpened(false);
+  };
+
+  const handleOpen = () => {
+    setModalOpened(true);
+  };
   const columns: GridColDef[] = [
     {
       field: "nome",
       headerName: "Membro",
       width: 442,
-      sortable: false,
+      sortable: true,
       renderCell: ({ row }) => (
         <ImagemENomeTabela
           imagem={row.imagem}
           nome={row.nome}
           imagemPadrao="Usuário"
           onClick={() => {
-            console.log(row);
+            handleOpen();
           }}
         />
       ),
@@ -34,7 +44,7 @@ export function TabelaMembros() {
       renderHeader: () => (
           <AddIcon
           onClick={() => {
-            addItem();
+            handleOpen();
           }}
           style={{ cursor: "pointer" }}
           />
@@ -68,6 +78,16 @@ export function TabelaMembros() {
         justifyContent: "center",
       }}
     >
+      <ModalUsuario
+        onClose={handleClose}
+        open={modalOpened}
+        usuario={{
+          name: "gustavin",
+          recivedCoins: 600,
+          acumlatedCoins: 800,
+          spendedCoins: 200,
+        }}
+      />
       <DataGrid
         rows={rows}
         columns={columns}

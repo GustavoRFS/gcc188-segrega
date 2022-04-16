@@ -23,7 +23,15 @@ export function Perfil() {
           justifyContent: "center",
         }}
       >
-        <PerfilComponent />
+        <PerfilComponent
+          usuario={{
+            name: "gustavin",
+            recivedCoins: 600,
+            acumlatedCoins: 800,
+            spendedCoins: 200,
+          }}
+          
+        />
       </Grid>
       <Grid
         item
@@ -39,7 +47,7 @@ export function Perfil() {
           alignItems: "center",
         }}
       >
-        <TabelaPedidos/>
+        <TabelaPedidos />
       </Grid>
     </Grid>
   );

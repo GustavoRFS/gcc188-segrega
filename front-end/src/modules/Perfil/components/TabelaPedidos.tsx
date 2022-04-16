@@ -1,19 +1,7 @@
-import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import ModalProduto from "../../../shared/components/ModalProduto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
 export function TabelaPedidos() {
-  const [open, setOpen] = React.useState(false);
-  const [produto, setProduto] = React.useState({});
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClickClose = () => {
-    setProduto({});
-    setOpen(false);
-  };
 
   const columns: GridColDef[] = [
     {
@@ -27,7 +15,7 @@ export function TabelaPedidos() {
           nome={row.nome}
           imagemPadrao="Foto"
           onClick={() => {
-            handleClickOpen();
+            
           }}
         />
       ),
@@ -62,13 +50,7 @@ export function TabelaPedidos() {
         disableColumnMenu
         autoHeight
       />
-      <ModalProduto
-        onClose={() => {
-          handleClickClose();
-        }}
-        open={open}
-        produto={produto}
-      />
+     
     </div>
   );
 }
