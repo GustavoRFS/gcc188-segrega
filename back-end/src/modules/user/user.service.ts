@@ -12,6 +12,10 @@ export class UsersService {
     return await UsersRepository.getUsers();
   }
 
+  public static async getTopUsers(): Promise<UserOutput[]> {
+    return await UsersRepository.getUsers({ order: { totalPoints: 'DESC' }, take: 10 });
+  }
+
   public static generateToken(params) {
     return jwt.sign(params, authConfig.secret, { expiresIn: 86400 });
   };

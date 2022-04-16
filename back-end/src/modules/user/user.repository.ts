@@ -3,9 +3,9 @@ import { getRepository, Repository } from "typeorm";
 import { UserEmailOutput, UserInput, UserLoginOutput, UserOutput } from "./user.dto";
 
 export class UsersRepository {
-  public static async getUsers(): Promise<UserOutput[]> {
+  public static async getUsers(search?: any): Promise<UserOutput[]> {
     const repository: Repository<User> = getRepository(User);
-    return await repository.find();
+    return await repository.find(search);
   }
 
   public static async getUserById(id: number): Promise<UserOutput> {
