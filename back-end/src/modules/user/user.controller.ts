@@ -27,6 +27,16 @@ export class UsersController extends Controller {
     return response;
   }
 
+  @Get("/top")
+  @SuccessResponse("200", "Sucesso")
+  @Security("jwt", ["user"])
+  @Route("/")
+  public async getTopUsers(): Promise<UserOutput[]> {
+    const response = await UsersService.getTopUsers();
+    this.setStatus(200);
+    return response;
+  }
+
   @Get("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
