@@ -1,9 +1,12 @@
 import { UsersRepository } from "./user.repository";
 import { User, UserInput, UserLogin, UserLoginOutput, UserOutput } from "./user.dto";
-import authConfig from '../../utils/auth'
+import authConfig from '../../config/auth'
+import urls from '../../config/urls'
+import Mailer from '../../utils/Mailer';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+
 export class UsersService {
   public static async getUsers(): Promise<UserOutput[]> {
     return await UsersRepository.getUsers();
@@ -32,7 +35,23 @@ export class UsersService {
     const {
       raw: [{ id }],
     } = await UsersRepository.createUser(Object.assign(user, { registerToken }));
-
+    const link = `${urls.frontUrl}/confirm-register/${registerToken}`
+    Mailer.sendMail(
+      {
+        to: user.email,
+        from: 'CompGame',
+        template: 'confirmEmail',
+        context: { link },
+        subject: 'Confirme seu cadastro',
+      },
+      (error) => {
+        if (error) {
+          console.error('Erro ao enviar email', error);
+        } else {
+          console.log('Email enviado com sucesso: ', user.email)
+        }
+      },
+    );
     return await this.getUserById(id);
   }
 

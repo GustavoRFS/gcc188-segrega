@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import authConfig from '../utils/auth'
+import authConfig from '../config/auth'
 
 export function expressAuthentication(
     request: express.Request,
@@ -9,7 +9,6 @@ export function expressAuthentication(
 ): Promise<any> {
     if (securityName === "jwt") {
         let token = request.headers.authorization ? request.headers.authorization.split(' ')[1] : null;
-
         return new Promise((resolve, reject) => {
             if (!token) {
                 reject(new Error("No token provided"));
@@ -20,8 +19,9 @@ export function expressAuthentication(
                 } else {
                     if (decoded.nivel && (decoded.nivel === 'admin' || scopes[0] === decoded.nivel)) {
                         resolve(decoded);
+                    } else {
+                        reject(new Error('Usuário não possui as permissões necessárias'))
                     }
-                    reject(new Error('Usuário não possui as permissões necessárias'))
                 }
             });
         });

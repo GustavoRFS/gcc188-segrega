@@ -3,6 +3,14 @@ export type UserLogin = {
   password: string;
 };
 
+export type UserConfirm = {
+  password: string;
+};
+
+export type UserConfirmOutput = {
+  id: number;
+}
+
 export type UserInput = {
   name: string;
   email: string;

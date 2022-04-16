@@ -13,7 +13,7 @@ import {
   Security,
 } from "tsoa";
 import { UsersService } from "./user.service";
-import { UserInput, UserOutput, UserLogin, UserLoginOutput } from "./user.dto";
+import { UserInput, UserOutput, UserLogin, UserLoginOutput, UserConfirm, UserConfirmOutput } from "./user.dto";
 
 @Route("users")
 export class UsersController extends Controller {
@@ -55,12 +55,7 @@ export class UsersController extends Controller {
     return response;
   }
 
-  //todo: fazer rota para apos o usuario receber email para receber a senha
-  //todo: setar registerToken
-  //todo: comparar o register token
-  //todo: atualizar dto
-  //todo: enviar email
-  @Post("/send-mail")
+  @Post("/register")
   @SuccessResponse("200", "Sucesso")
   @Security("jwt", ["admin"])
   public async createUserAndSendMail(
@@ -73,17 +68,17 @@ export class UsersController extends Controller {
     return response;
   }
 
-  @Post("/confirm/{registerToken}")
+  @Post("/confirm-user/{registerToken}")
   @SuccessResponse("200", "Sucesso")
   public async confirmUser(
     @Path() registerToken: string,
-    @Body() password: string
-  ): Promise<UserOutput> {
-    const response = await UsersService.confirmUser(registerToken, password);
+    @Body() password: UserConfirm
+  ): Promise<UserConfirmOutput> {
+    const response = await UsersService.confirmUser(registerToken, password.password);
 
     this.setStatus(200);
 
-    return response;
+    return { id: response.id };
   }
 
   @Put("/{id}")
