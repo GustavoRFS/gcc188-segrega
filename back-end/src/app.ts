@@ -5,10 +5,13 @@ import bodyParser from "body-parser";
 import { RegisterRoutes } from "../build/routes";
 import { createUploadsFolder } from "./utils/files";
 import { filesRouter } from "./modules/files/getFiles";
+import cors from "cors"
 
 createUploadsFolder();
 
 const app = express();
+
+app.use(cors())
 
 app.use(
   bodyParser.urlencoded({
