@@ -38,8 +38,14 @@ export type UserEmailOutput = {
 };
 
 export type UserLoginOutput = {
+  id: number;
+  name: string;
+  points: number;
+  totalPoints: number;
+  email: string;
+  nivel: string;
   token: string;
-  tokenExpiration: string;
+  tokenExpiration: number;
 };
 
 export type User = {

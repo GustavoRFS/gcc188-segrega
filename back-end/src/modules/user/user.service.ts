@@ -66,14 +66,15 @@ export class UsersService {
     const userResponse = await UsersRepository.getUserByEmail(user.email);
 
     const verifyPassword = await bcrypt.compare(user.password, userResponse.password);
-
     if (verifyPassword) {
       const token = this.generateToken({
         uid: userResponse.id,
         email: userResponse.email,
         nivel: userResponse.nivel,
       });
-      return { token, tokenExpiration: '1d' };
+      const u = await this.getUserById(userResponse.id)
+
+      return Object.assign(u, { token, tokenExpiration: 86400 });
     }
     return null;
   }
