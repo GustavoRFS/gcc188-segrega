@@ -14,6 +14,8 @@ export default function Login() {
 
   const login = async () => {
     try {
+      // email = "vitoraot@gmail.com"
+      // password = "012345678"
       const user = await api.post("/users/login", { email, password });
       
       setToken(user.data.token, user.data.tokenExpiration)
@@ -23,7 +25,7 @@ export default function Login() {
           name: user.data.name,
           //profilePicture: "kkkk",
           accumulatedCoins: user.data.totalPoints,
-          currentCoins: user.data.currentPoints,
+          currentCoins: user.data.points,
           isAdmin: user.data.nivel === 'admin',
         },
       });

@@ -3,6 +3,15 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import AddIcon from "@mui/icons-material/Add";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
+import api from "../../../services/api";
+
+let users:any;
+
+const get = async () => {
+  users = (await api.get("/users")).data;
+}
+
+get()
 
 export function TabelaMembros() {
   const addItem = () => {
@@ -51,24 +60,15 @@ export function TabelaMembros() {
       ),
     },
   ];
-
-  const rows = [
-    {
-      id: 1,
-      nome: "Gustavo Ribeiro",
-      moedasRecebidas: "1000 CPs",
-    },
-    {
-      id: 2,
-      nome: "Vitor André",
-      moedasRecebidas: "800 CPs",
-    },
-    {
-      id: 3,
-      nome: "Vinicius Caputo",
-      moedasRecebidas: "590 CPs",
-    },
-  ];
+  
+  const rows = users.map((u:any) => {
+    return {
+      id: u.id,
+      nome: u.name,
+      moedasRecebidas: u.totalPoints
+    }
+  })
+  
   return (
     <div
       style={{
