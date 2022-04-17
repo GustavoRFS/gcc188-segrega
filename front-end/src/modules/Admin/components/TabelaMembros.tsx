@@ -5,12 +5,14 @@ import AddIcon from "@mui/icons-material/Add";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
 import api from "../../../services/api";
 import React from "react";
+import { ModalAddUsuario } from "../../../shared/components/ModalAddUsuario";
 
 export function TabelaMembros() {
   const addItem = () => {
 
   }
   const [modalOpened, setModalOpened] = useState(false);
+  const [addModalOpened, setAddModalOpened] = useState(false);
   const [membro, setMembro] = React.useState({});
   const [rows, setRows] = React.useState([]);
 
@@ -24,6 +26,16 @@ export function TabelaMembros() {
   const handleOpen = () => {
     setMembro(currentUser)
     setModalOpened(true);
+  };
+  
+  const handleCloseAddModal = () => {
+    setMembro({})
+    setAddModalOpened(false);
+  };
+
+  const handleOpenAddModal = () => {
+    setMembro(currentUser)
+    setAddModalOpened(true);
   };
   
   if (rows.length === 0) {
@@ -76,7 +88,7 @@ export function TabelaMembros() {
       renderHeader: () => (
           <AddIcon
           onClick={() => {
-            handleOpen();
+            handleOpenAddModal();
           }}
           style={{ cursor: "pointer" }}
           />
@@ -97,6 +109,10 @@ export function TabelaMembros() {
         onClose={handleClose}
         open={modalOpened}
         usuario={membro}
+      />
+      <ModalAddUsuario
+        onClose={handleCloseAddModal}
+        open={addModalOpened}
       />
       <DataGrid
         rows={rows}
