@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getToken } from "../services/tokens";
 import { Switch, Route, useHistory } from "react-router-dom";
 import Login from "../modules/Login";
+import ConfirmRegister from "../modules/ConfirmRegister";
 import { Inicio } from "../modules/Inicio";
 import NavBar from "../shared/components/NavBar";
 import api from "../services/api";
@@ -13,6 +14,7 @@ const AuthRoutes = () => {
   return (
     <Switch>
       <Route path="/login" component={Login} exact />
+      <Route path="/confirm-register/:registerToken" component={ConfirmRegister} exact />
       {/* <Route path="/inicio" component={Inicio} /> */}
     </Switch>
   );
