@@ -10,7 +10,6 @@ type ModalUsuarioProps = {
 
 export function ModalUsuario({onClose, open, usuario}: ModalUsuarioProps) {
 
-
   return (
     <div>
       <ModalPadrao onClose={onClose} open={open}>

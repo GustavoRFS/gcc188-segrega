@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { Button, TextField } from ".";
 import { MouseEventHandler, useState } from "react";
 import { ModalAdcMoedas } from "./ModalAdcMoedas";
+import api from "../../services/api";
 
 type UserProps = {
   usuario: any;
@@ -63,14 +64,19 @@ export function PerfilComponent({
   const handleOpen = () => {
     setModalOpened(true);
   };
+
+  const deleteUser = async () => {
+    await api.delete(`/users/${usuario.id}`);
+    alert('Usuário excluído com sucesso!')
+  }
   
   return (
     <div>
-      <ModalAdcMoedas onClose={handleClose} open={modalOpened} />
+      <ModalAdcMoedas onClose={handleClose} open={modalOpened} usuario={usuario}/>
       <Item elevation={elevation}>
         <Avatar
           alt="Remy Sharp"
-          src={require("../../assets/gustavin.png")}
+          src={require("../../assets/Logo.svg")}
           sx={{ width: 150, height: 150 }}
         />
         {isAdm && onClose ? (
@@ -121,7 +127,7 @@ export function PerfilComponent({
           </Box>
           <Box>
             <Titulo>Moedas acumuladas</Titulo>
-            <Pontos>{usuario.acumlatedCoins} CPS</Pontos>
+            <Pontos>{usuario.acumulatedCoins} CPS</Pontos>
           </Box>
           <Box>
             <Titulo>Moedas Gastas</Titulo>
@@ -143,18 +149,16 @@ export function PerfilComponent({
                   marginRight: 20,
                   width: 165,
                 }}
-                onClick={onClose}
+                onClick={deleteUser}
               >
-                {" "}
-                Excluir Usuario{" "}
+                Excluir Usuario
               </Button>
               <Button
                 variant="contained"
                 style={{ width: 165 }}
                 onClick={handleOpen}
               >
-                {" "}
-                Adicionar moedas{" "}
+                Adicionar moedas
               </Button>
             </div>
           )}
