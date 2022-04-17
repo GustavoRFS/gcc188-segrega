@@ -3,8 +3,26 @@ import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { StatusPosicao } from "./StatusPosicao";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
+import api from "../../../services/api";
+
+let users:any;
+
+const get = async () => {
+  users = (await api.get("/users/top")).data;
+}
+
+get()
 
 export function TabelaRanking() {
+  let rows = users.map((user:any, index: number) => {
+    return {
+      id: user.id,
+      nome: user.name,
+      moedasRecebidas: user.totalPoints,
+      posicaoAtual: index + 1,
+      posicaoAntiga: index + 1,
+    }
+  })
   const [modalOpened, setModalOpened] = useState(false);
 
   const handleClose = () => {
@@ -56,29 +74,6 @@ export function TabelaRanking() {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      nome: "Gustavo Ribeiro",
-      moedasRecebidas: "1000 CPs",
-      posicaoAtual: 1,
-      posicaoAntiga: 3,
-    },
-    {
-      id: 2,
-      nome: "Vitor André",
-      moedasRecebidas: "800 CPs",
-      posicaoAtual: 2,
-      posicaoAntiga: 2,
-    },
-    {
-      id: 3,
-      nome: "Vinicius Caputo",
-      moedasRecebidas: "590 CPs",
-      posicaoAtual: 3,
-      posicaoAntiga: 1,
-    },
-  ];
   return (
     <div
       style={{
