@@ -27,7 +27,7 @@ export function Perfil() {
           usuario={{
             name: "gustavin",
             recivedCoins: 600,
-            acumlatedCoins: 800,
+            acumulatedCoins: 800,
             spendedCoins: 200,
           }}
           

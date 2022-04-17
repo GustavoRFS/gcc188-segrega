@@ -1,37 +1,41 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { StatusPosicao } from "./StatusPosicao";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
 import api from "../../../services/api";
 
-let users:any;
-
-const get = async () => {
-  users = (await api.get("/users/top")).data;
-}
-
-get()
-
 export function TabelaRanking() {
-  let rows = users.map((user:any, index: number) => {
-    return {
-      id: user.id,
-      nome: user.name,
-      moedasRecebidas: user.totalPoints,
-      posicaoAtual: index + 1,
-      posicaoAntiga: index + 1,
-    }
-  })
+  const [rows, setRows] = React.useState([]);
   const [modalOpened, setModalOpened] = useState(false);
+  const [membro, setMembro] = React.useState({});
+
+  let currentUser: any = {}
 
   const handleClose = () => {
+    setMembro({})
     setModalOpened(false);
   };
 
   const handleOpen = () => {
+    setMembro(currentUser)
     setModalOpened(true);
   };
+
+  api.get("/users").then((users:any) => {
+    setRows(users.data.map((user:any, index: number) => {
+      return {
+        id: user.id,
+        nome: user.name,
+        email: user.email,
+        moedasRecebidas: user.points,
+        moedasTotais: user.totalPoints,
+        moedasGastas: user.totalPoints - user.points,
+        posicaoAtual: index + 1,
+        posicaoAntiga: index + 1,
+      }
+    }))
+  })
 
   const columns: GridColDef[] = [
     {
@@ -59,6 +63,14 @@ export function TabelaRanking() {
           nome={row.nome}
           imagemPadrao="Usuário"
           onClick={() => {
+            currentUser = {
+              id: row.id,
+              name: row.nome,
+              email: row.email,
+              recivedCoins: row.moedasRecebidas,
+              acumulatedCoins: row.moedasTotais,
+              spendedCoins: row.moedasGastas,
+            }            
             handleOpen();
           }}
         />
@@ -86,12 +98,7 @@ export function TabelaRanking() {
       <ModalUsuario
         onClose={handleClose}
         open={modalOpened}
-        usuario={{
-          name: "gustavin",
-          recivedCoins: 600,
-          acumlatedCoins: 800,
-          spendedCoins: 200,
-        }}
+        usuario={membro}
       />
       <DataGrid
         rows={rows}

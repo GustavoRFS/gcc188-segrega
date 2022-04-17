@@ -1,15 +1,31 @@
 import { ModalPadrao } from "./ModalPadrao";
 import { Button, TextField } from ".";
 import { MouseEventHandler } from "react";
+import api from "../../services/api";
 
 type ModalAdcMoedasProps = {
   onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
   open: boolean;
+  usuario: any;
 };
 
 export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
   const { onClose, open } = props;
 
+  let moedas:number = 0;
+
+  const addMoedas = async () => {    
+    props.usuario.recivedCoins += moedas
+    props.usuario.acumulatedCoins += moedas
+    const body = {
+      name: props.usuario.name,
+      email: props.usuario.email,
+      points: props.usuario.recivedCoins,
+      totalPoints: props.usuario.acumulatedCoins
+    }
+    api.put(`/users/${props.usuario.id}`, body)
+    alert('Moedas inseridas com sucesso!')
+  }
   return (
     <div>
       <ModalPadrao onClose={onClose} open={open}>
@@ -33,9 +49,11 @@ export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
               textAlign: "center",
             }}
           >
-            Digite quantas moedas deseja adicionar para Gustavo Ribeiro
+            Digite quantas moedas deseja adicionar para {props.usuario.name}
           </h1>
-          <TextField type="number" label="Número de Moedas"></TextField>
+          <TextField type="number" label="Número de Moedas" onChange={(m) => {
+            moedas = Number(m.target.value);
+          }}></TextField>
           <div
             style={{
               display: "flex",
@@ -53,16 +71,14 @@ export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
               }}
               onClick={onClose}
             >
-              {" "}
-              Cancelar{" "}
+              Cancelar
             </Button>
             <Button
               variant="contained"
               style={{ width: 165 }}
-              onClick={onClose}
+              onClick={addMoedas}
             >
-              {" "}
-              Adicionar moedas{" "}
+              Adicionar moedas
             </Button>
           </div>
         </div>

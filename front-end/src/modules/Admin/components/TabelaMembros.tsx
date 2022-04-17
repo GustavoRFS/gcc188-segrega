@@ -4,28 +4,43 @@ import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela"
 import AddIcon from "@mui/icons-material/Add";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
 import api from "../../../services/api";
-
-let users:any;
-
-const get = async () => {
-  users = (await api.get("/users")).data;
-}
-
-get()
+import React from "react";
 
 export function TabelaMembros() {
   const addItem = () => {
 
   }
   const [modalOpened, setModalOpened] = useState(false);
+  const [membro, setMembro] = React.useState({});
+  const [rows, setRows] = React.useState([]);
+
+  let currentUser: any = {}
 
   const handleClose = () => {
+    setMembro({})
     setModalOpened(false);
   };
 
   const handleOpen = () => {
+    setMembro(currentUser)
     setModalOpened(true);
   };
+  
+  if (rows.length === 0) {
+    api.get("/users").then((users:any) => {      
+      setRows(users.data.map((u:any) => {
+        return {
+          id: u.id,
+          nome: u.name,
+          email: u.email,
+          moedasRecebidas: u.points,
+          moedasTotais: u.totalPoints,
+          moedasGastas: u.totalPoints - u.points
+        }
+      })) 
+    });
+  }
+
   const columns: GridColDef[] = [
     {
       field: "nome",
@@ -38,6 +53,14 @@ export function TabelaMembros() {
           nome={row.nome}
           imagemPadrao="Usuário"
           onClick={() => {
+            currentUser = {
+              id: row.id,
+              name: row.nome,
+              email: row.email,
+              recivedCoins: row.moedasRecebidas,
+              acumulatedCoins: row.moedasTotais,
+              spendedCoins: row.moedasGastas,
+            }            
             handleOpen();
           }}
         />
@@ -61,14 +84,6 @@ export function TabelaMembros() {
     },
   ];
   
-  const rows = users.map((u:any) => {
-    return {
-      id: u.id,
-      nome: u.name,
-      moedasRecebidas: u.totalPoints
-    }
-  })
-  
   return (
     <div
       style={{
@@ -81,12 +96,7 @@ export function TabelaMembros() {
       <ModalUsuario
         onClose={handleClose}
         open={modalOpened}
-        usuario={{
-          name: "gustavin",
-          recivedCoins: 600,
-          acumlatedCoins: 800,
-          spendedCoins: 200,
-        }}
+        usuario={membro}
       />
       <DataGrid
         rows={rows}
