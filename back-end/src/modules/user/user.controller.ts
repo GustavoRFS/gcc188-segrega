@@ -78,7 +78,7 @@ export class UsersController extends Controller {
 
   @Post("/register")
   @SuccessResponse("200", "Sucesso")
-  @Security("jwt", ["admin"])
+  //@Security("jwt", ["admin"])
   public async createUserAndSendMail(
     @Body() user: UserInput
   ): Promise<UserOutput> {
