@@ -25,3 +25,6 @@ export async function GetUserById(id: number) {
 export async function GetCurrentUser() {
   return await GetUserById(jwtDecode<{ id: number }>(getToken()).id);
 }
+export async function DeleteUser(id: number) {
+  return await Api().delete(`/users/${id}`);
+}

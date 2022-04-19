@@ -16,8 +16,6 @@ export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
   const [moedas, setMoedas] = useState(0);
 
   const addMoedas = async () => {
-    console.log(props.usuario);
-
     await EditUser(props.usuario.id, {
       name: props.usuario.name,
       email: props.usuario.email,
@@ -25,6 +23,7 @@ export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
       totalPoints: props.usuario.totalPoints + moedas,
     });
     alert("Moedas inseridas com sucesso!");
+    window.location.reload();
   };
   return (
     <div>

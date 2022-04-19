@@ -28,16 +28,7 @@ export function Perfil() {
           justifyContent: "center",
         }}
       >
-        <PerfilComponent
-          usuario={{
-            acumulatedCoins: usuario.points,
-            receivedCoins: usuario.totalPoints,
-            spendedCoins: usuario.totalPoints - usuario.points,
-            name: usuario.name,
-            email: usuario.name,
-            id: usuario.id,
-          }}
-        />
+        <PerfilComponent usuario={usuario} />
       </Grid>
       <Grid
         item

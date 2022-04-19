@@ -12,6 +12,8 @@ export type UserConfirmOutput = {
 };
 
 export type UserInput = {
+  id?: number;
+  nivel?: "admin" | "user";
   name?: string;
   email?: string;
   points?: number;

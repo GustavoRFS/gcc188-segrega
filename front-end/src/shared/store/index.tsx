@@ -12,6 +12,7 @@ export type AppData = {
   currentUser: {
     id: number;
     name: string;
+    email: string;
     profilePicture: string;
     totalPoints: number;
     points: number;

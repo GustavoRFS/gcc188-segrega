@@ -112,6 +112,7 @@ export class UsersController extends Controller {
     @Path() id: number,
     @Body() user: UserInput
   ): Promise<UserOutput> {
+    console.log(user);
     const response = await UsersService.updateUser(id, user);
 
     if (!response) {

@@ -151,6 +151,7 @@ export default function ModalProduto(props: ModalProdutoProps) {
                     } else {
                       editItem();
                     }
+                    window.location.reload();
                   }}
                 >
                   Salvar Produto

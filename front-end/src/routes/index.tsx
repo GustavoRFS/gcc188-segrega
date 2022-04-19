@@ -76,10 +76,6 @@ export default function Routes() {
           payload: { id, email, nivel, name, points, totalPoints, orders },
         });
       });
-
-      if (id) {
-        history.push("/inicio");
-      }
     }
   }, [history.location.pathname]);
 

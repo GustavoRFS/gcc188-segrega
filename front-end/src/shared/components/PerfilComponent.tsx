@@ -1,21 +1,15 @@
 import { Paper, Avatar } from "@mui/material";
 import { styled } from "@mui/system";
 import { Button, TextField } from ".";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { ModalAdcMoedas } from "./ModalAdcMoedas";
 import api from "../../services/api";
 import { useAppContext } from "../store/index";
+import { User } from "../../services/Users/dto";
+import { DeleteUser, EditUser } from "../../services/Users";
 
 type UserProps = {
-  usuario: {
-    name: string;
-    email: string;
-    id: number;
-    position?: number;
-    receivedCoins: number;
-    acumulatedCoins: number;
-    spendedCoins: number;
-  };
+  usuario: User;
   elevation?: 0 | 5;
   onClose?: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 };
@@ -63,6 +57,15 @@ export function PerfilComponent({
   onClose,
 }: UserProps) {
   const [modalOpened, setModalOpened] = useState(false);
+  const [usuarioForm, setUsuarioForm] = useState<User>({} as User);
+
+  useEffect(() => {
+    setUsuarioForm({ ...usuario });
+  }, [usuario]);
+
+  const handleChangeForm = (key: string) => (event: any) => {
+    setUsuarioForm({ ...usuario, [key]: event.target.value });
+  };
 
   const { state } = useAppContext();
 
@@ -77,8 +80,15 @@ export function PerfilComponent({
   };
 
   const deleteUser = async () => {
-    await api().delete(`/users/${usuario.id}`);
+    await DeleteUser(usuario.id);
     alert("Usuário excluído com sucesso!");
+    window.location.reload();
+  };
+
+  const editUser = async () => {
+    await EditUser(usuario.id, usuarioForm);
+    alert("Usuário editado com sucesso!");
+    window.location.reload();
   };
 
   return (
@@ -107,11 +117,13 @@ export function PerfilComponent({
               style={{ marginBottom: 20 }}
               label="Nome do Usuário"
               defaultValue={usuario.name}
+              onChange={handleChangeForm("name")}
             />
             <TextField
               label="Email do Usuário"
               type="email"
               defaultValue={usuario.email}
+              onChange={handleChangeForm("email")}
             ></TextField>
           </div>
         ) : (
@@ -143,15 +155,15 @@ export function PerfilComponent({
         >
           <Box>
             <Titulo>Moedas Recebidas</Titulo>
-            <Pontos>{usuario.receivedCoins} CPS</Pontos>
+            <Pontos>{usuario.totalPoints} CPs</Pontos>
           </Box>
           <Box>
             <Titulo>Moedas acumuladas</Titulo>
-            <Pontos>{usuario.acumulatedCoins} CPS</Pontos>
+            <Pontos>{usuario.points} CPs</Pontos>
           </Box>
           <Box>
             <Titulo>Moedas Gastas</Titulo>
-            <Pontos>{usuario.spendedCoins} CPS</Pontos>
+            <Pontos>{usuario.totalPoints - usuario.points} CPs</Pontos>
           </Box>
           {isAdm && onClose && (
             <div
@@ -175,10 +187,17 @@ export function PerfilComponent({
               </Button>
               <Button
                 variant="contained"
-                style={{ width: 165 }}
+                style={{ width: 165, marginRight: 20 }}
                 onClick={handleOpen}
               >
                 Adicionar moedas
+              </Button>
+              <Button
+                variant="contained"
+                style={{ width: 165 }}
+                onClick={editUser}
+              >
+                Salvar Usuário
               </Button>
             </div>
           )}

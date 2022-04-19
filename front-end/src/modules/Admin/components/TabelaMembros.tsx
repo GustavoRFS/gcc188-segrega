@@ -8,6 +8,7 @@ import { GetUsers } from "../../../services/Users";
 import { User } from "../../../services/Users/dto";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ModalAdcMoedas } from "../../../shared/components/ModalAdcMoedas";
 
 export function TabelaMembros() {
   const addItem = () => {};
