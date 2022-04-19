@@ -14,8 +14,6 @@ import {
 } from "tsoa";
 import { OrdersService } from "./order.service";
 import { OrderInput, OrderOutput, OrderRequest } from "./order.dto";
-import { ProductsService } from "../products/products.service";
-import moment from "moment";
 
 @Route("orders")
 export class OrdersController extends Controller {

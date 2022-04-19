@@ -2,8 +2,13 @@ import { TabelaPedidos } from "./components/TabelaPedidos";
 import { PerfilComponent } from "../../shared/components/PerfilComponent";
 
 import { Grid } from "@mui/material";
+import { useAppContext } from "../../shared/store";
 
 export function Perfil() {
+  const {
+    state: { currentUser: usuario },
+  } = useAppContext();
+
   return (
     <Grid
       container
@@ -25,12 +30,13 @@ export function Perfil() {
       >
         <PerfilComponent
           usuario={{
-            name: "gustavin",
-            recivedCoins: 600,
-            acumulatedCoins: 800,
-            spendedCoins: 200,
+            acumulatedCoins: usuario.points,
+            receivedCoins: usuario.totalPoints,
+            spendedCoins: usuario.totalPoints - usuario.points,
+            name: usuario.name,
+            email: usuario.name,
+            id: usuario.id,
           }}
-          
         />
       </Grid>
       <Grid

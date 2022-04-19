@@ -69,11 +69,11 @@ export default function Routes() {
       }>(token);
 
       GetCurrentUser().then(({ data }) => {
-        const { email, id, name, nivel, points, totalPoints } = data;
+        const { email, id, name, nivel, points, totalPoints, orders } = data;
 
         dispatch({
           type: "CURRENT_USER",
-          payload: { id, email, nivel, name, points, totalPoints },
+          payload: { id, email, nivel, name, points, totalPoints, orders },
         });
       });
 

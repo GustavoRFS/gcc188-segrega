@@ -15,7 +15,10 @@ export class UsersRepository {
 
   public static async getUserById(id: number): Promise<UserOutput> {
     const repository: Repository<User> = getRepository(User);
-    return await repository.findOne({ id });
+    return await repository.findOne({
+      where: { id },
+      relations: ["orders", "orders.product"],
+    });
   }
 
   public static async getUserByEmail(email: string): Promise<UserEmailOutput> {
@@ -32,13 +35,11 @@ export class UsersRepository {
   }
 
   public static async createUser(user: any) {
-    //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.insert(user);
   }
 
   public static async updateUser(id: number, user: any) {
-    //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.update({ id }, user);
   }

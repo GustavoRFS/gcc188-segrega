@@ -1,3 +1,5 @@
+import { OrderResponse } from "../Orders/dto";
+
 export type User = {
   nivel: string;
   email: string;
@@ -6,6 +8,7 @@ export type User = {
   name: string;
   id: number;
   position?: number;
+  orders: OrderResponse[];
 };
 
 export type UserRequest = {

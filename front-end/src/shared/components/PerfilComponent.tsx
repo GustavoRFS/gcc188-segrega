@@ -7,7 +7,15 @@ import api from "../../services/api";
 import { useAppContext } from "../store/index";
 
 type UserProps = {
-  usuario: any;
+  usuario: {
+    name: string;
+    email: string;
+    id: number;
+    position?: number;
+    receivedCoins: number;
+    acumulatedCoins: number;
+    spendedCoins: number;
+  };
   elevation?: 0 | 5;
   onClose?: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 };
@@ -135,7 +143,7 @@ export function PerfilComponent({
         >
           <Box>
             <Titulo>Moedas Recebidas</Titulo>
-            <Pontos>{usuario.recivedCoins} CPS</Pontos>
+            <Pontos>{usuario.receivedCoins} CPS</Pontos>
           </Box>
           <Box>
             <Titulo>Moedas acumuladas</Titulo>

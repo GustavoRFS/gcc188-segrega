@@ -5,6 +5,7 @@ import React, {
   Dispatch,
   ReactNode,
 } from "react";
+import { OrderResponse } from "../../services/Orders/dto";
 import reducer from "./reducer";
 
 export type AppData = {
@@ -15,6 +16,7 @@ export type AppData = {
     totalPoints: number;
     points: number;
     nivel: "admin" | "user";
+    orders: OrderResponse[];
   };
 };
 
