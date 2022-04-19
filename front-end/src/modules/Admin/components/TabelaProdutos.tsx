@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -6,9 +6,13 @@ import AddIcon from "@mui/icons-material/Add";
 import ModalProduto from "../../../shared/components/ModalProduto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
+import { GetProducts, DeleteProduct } from "../../../services/Produtos";
+import { Product } from "../../../services/Produtos/dto";
+
 export function TabelaProdutos() {
   const [open, setOpen] = useState(false);
   const [produto, setProduto] = useState({});
+  const [produtos, setProdutos] = useState<Product[]>([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -18,6 +22,16 @@ export function TabelaProdutos() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    GetProducts()
+      .then(({ data }) => {
+        setProdutos(data);
+      })
+      .catch(() => {
+        alert("Erro!");
+      });
+  }, []);
+
   const columns: GridColDef[] = [
     {
       field: "nome",
@@ -25,8 +39,8 @@ export function TabelaProdutos() {
       width: 300,
       renderCell: ({ row }) => (
         <ImagemENomeTabela
-          imagem={row.imagem}
-          nome={row.nome}
+          imagem={`${process.env.REACT_APP_API_URL}/uploads/${row.image}`}
+          nome={row.name}
           imagemPadrao="Foto"
           onClick={() => {
             console.log(row);
@@ -40,7 +54,7 @@ export function TabelaProdutos() {
       width: 100,
       headerAlign: "center",
       align: "center",
-      renderCell: ({ row }) => <>{row.preco} CPs</>,
+      renderCell: ({ row }) => <>{row.price} CPs</>,
     },
     {
       field: "buttons",
@@ -85,15 +99,18 @@ export function TabelaProdutos() {
     handleClickOpen();
   }
 
-  function deleteItem(row: { nome: String }): void {
-    alert(row.nome);
+  function deleteItem(row: { id: number }): void {
+    DeleteProduct(row.id).then(({ data }) => {
+      GetProducts()
+        .then(({ data }) => {
+          setProdutos(data);
+        })
+        .catch(() => {
+          alert("Erro!");
+        });
+    });
   }
 
-  const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: 900 },
-    { id: 2, nome: "Amazon Alexa", preco: 1000 },
-    { id: 3, nome: "Mouse Logitech", preco: 400 },
-  ];
   return (
     <div
       style={{
@@ -104,7 +121,7 @@ export function TabelaProdutos() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={produtos}
         columns={columns}
         hideFooter={true}
         rowHeight={40}

@@ -1,37 +1,15 @@
 import { ImageList, Typography, Paper } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useMemo, useState,useEffect } from "react";
 // @ts-ignore
 import useDimensions from "react-use-dimensions";
 import ModalProduto from "../../../shared/components/ModalProduto";
-
-const produtos = [
-  {
-    id: 1,
-    nome: "Amazon Kindle",
-    preco: "900 CPs",
-    imagem:
-      "https://lh3.googleusercontent.com/ogw/ADea4I7CNdH5fJYIg9hNZDJ2OQbh5gVVzlMR6NCE-IABRpU=s32-c-mo",
-  },
-  {
-    id: 2,
-    nome: "Amazon Alexa",
-    preco: "1000 CPs",
-    imagem:
-      "https://lh3.googleusercontent.com/ogw/ADea4I7CNdH5fJYIg9hNZDJ2OQbh5gVVzlMR6NCE-IABRpU=s32-c-mo",
-  },
-  {
-    id: 3,
-    nome: "Mouse Logitech",
-    preco: "400 CPs",
-    imagem:
-      "https://lh3.googleusercontent.com/ogw/ADea4I7CNdH5fJYIg9hNZDJ2OQbh5gVVzlMR6NCE-IABRpU=s32-c-mo",
-  },
-];
+import { GetProducts } from "../../../services/Produtos";
+import { Product } from "../../../services/Produtos/dto";
 
 export function ListaProdutos() {
   const [ref, { width }] = useDimensions();
   const [modalOpened, setModalOpened] = useState(false);
-
+  const [produtos, setProdutos] = useState<Product[]>([]);
   const cardSize = 160;
 
   const colsAmount = useMemo(() => {
@@ -49,6 +27,16 @@ export function ListaProdutos() {
   const handleOpen = () => {
     setModalOpened(true);
   };
+
+  useEffect(() => {
+    GetProducts()
+      .then(({ data }) => {
+        setProdutos(data);
+      })
+      .catch(() => {
+        alert("Erro!");
+      });
+  }, []);
 
   return (
     <>
@@ -82,15 +70,15 @@ export function ListaProdutos() {
               onClick={handleOpen}
             >
               <img
-                style={{ width: 150, marginBottom: 14 }}
-                src={`${produto.imagem}`}
-                alt={produto.nome}
+                style={{ width: 120, height:180, marginBottom: 14 }}
+                src={`${process.env.REACT_APP_API_URL}/uploads/${produto.image}`}
+                alt={produto.name}
                 loading="lazy"
               />
               <Typography variant="body1" style={{ textAlign: "center" }}>
-                {produto.nome}
+                {produto.name}
                 <br />
-                {produto.preco}
+                {produto.price}
               </Typography>
             </Paper>
           ))}
