@@ -5,6 +5,14 @@
 
 **Descrição:** Este é um sistema de gamificação para a CompJúnior. Neste sistema, um administrador pode gerenciar membros, adicionar moedas (Internas do sistema) na carteira dos membros e gerenciar produtos. Os membros, por outro lado, utilizarão as moedas recebidas para fazer pedidos de produtos. Seu objetivo é aumentar o engajamento dos membros a partir de uma plataforma de fácil uso.
 
+## Praticas de padrão de notação
+ - Utilizar nomenclatura clara e intuitiva
+ - Seguir os padrões utilizados no código
+ - Manter os dados de configuração separados do código fonte
+ - Evitar repetições excessivas
+ - Princípio da responsabilidade única
+ - Princípio da Segregação da Interface
+
 ## Tecnologias utilizadas
 
 #### Front End:
@@ -18,12 +26,3 @@
   - TSOA (Typescript Open API)  v3.14.1
   - TypeORM                     v0.2.44
   - PostgreSQL                  v14
-
-
-## Praticas de padrão de notação
- - Utilizar nomenclatura clara e intuitiva
- - Seguir os padrões utilizados no código
- - Manter os dados de configuração separados do código fonte
- - Evitar repetições excessivas
- - Princípio da responsabilidade única
- - Princípio da Segregação da Interface
