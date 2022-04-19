@@ -8,7 +8,6 @@ import { Typography } from "@mui/material";
 import { CreateProduct, EditProduct } from "../../services/Produtos";
 import { JSONtoFormData } from "../utils/JSONtoFormData";
 import { OrderProduct } from "../../services/Orders";
-import { GetCurrentUser } from "../../services/Users";
 
 type ModalProdutoProps = {
   onClose: Function;
@@ -20,7 +19,7 @@ type ModalProdutoProps = {
 export default function ModalProduto(props: ModalProdutoProps) {
   const { onClose, open, produto, isEditing } = props;
   const [produtoForm, setProdutoForm] = useState<Product | null>({} as Product);
-  const { state, dispatch } = useAppContext();
+  const { state } = useAppContext();
 
   useEffect(() => {
     setProdutoForm(produto ? { ...produto } : null);
@@ -67,8 +66,6 @@ export default function ModalProduto(props: ModalProdutoProps) {
   };
 
   const abrirModalConfirmacao = () => {
-    console.log(state);
-
     setModalConfirmacaoOpened(true);
   };
 
@@ -87,16 +84,18 @@ export default function ModalProduto(props: ModalProdutoProps) {
         textoConfirmacao="Resgatar"
         acao={() => {
           OrderProduct(produto?.id).then(() => {
+            window.location.reload();
+
             fecharModalConfirmacao();
             onClose();
-            GetCurrentUser().then(({ data }) => {
-              const { email, id, name, nivel, points, totalPoints } = data;
+            // GetCurrentUser().then(({ data }) => {
+            //   const { email, id, name, nivel, points, totalPoints } = data;
 
-              dispatch({
-                type: "CURRENT_USER",
-                payload: { id, email, nivel, name, points, totalPoints },
-              });
-            });
+            //   dispatch({
+            //     type: "CURRENT_USER",
+            //     payload: { id, email, nivel, name, points, totalPoints },
+            //   });
+            // });
           });
         }}
       />
