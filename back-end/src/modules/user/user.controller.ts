@@ -13,13 +13,20 @@ import {
   Security,
 } from "tsoa";
 import { UsersService } from "./user.service";
-import { UserInput, UserOutput, UserLogin, UserLoginOutput, UserConfirm, UserConfirmOutput } from "./user.dto";
+import {
+  UserInput,
+  UserOutput,
+  UserLogin,
+  UserLoginOutput,
+  UserConfirm,
+  UserConfirmOutput,
+} from "./user.dto";
 
 @Route("users")
 export class UsersController extends Controller {
   @Get()
   @SuccessResponse("200", "Sucesso")
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["user"])
   @Route("/")
   public async getUsers(): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();
@@ -57,12 +64,16 @@ export class UsersController extends Controller {
   @Response("400", "Não encontrado")
   public async login(
     @Body() user: UserLogin
-  ): Promise<UserLoginOutput> {
+  ): Promise<UserLoginOutput | string> {
     const response = await UsersService.login(user);
 
-    this.setStatus(200);
-
-    return response;
+    if (response) {
+      this.setStatus(200);
+      return response;
+    } else {
+      this.setStatus(403);
+      return "Token de autenticação inválido";
+    }
   }
 
   @Post("/register")
@@ -84,7 +95,10 @@ export class UsersController extends Controller {
     @Path() registerToken: string,
     @Body() password: UserConfirm
   ): Promise<UserConfirmOutput> {
-    const response = await UsersService.confirmUser(registerToken, password.password);
+    const response = await UsersService.confirmUser(
+      registerToken,
+      password.password
+    );
 
     this.setStatus(200);
 

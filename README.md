@@ -19,3 +19,11 @@
   - TypeORM                     v0.2.44
   - PostgreSQL                  v14
 
+
+## Praticas de padrão de notação
+ - Utilizar nomenclatura clara e intuitiva
+ - Seguir os padrões utilizados no código
+ - Manter os dados de configuração separados do código fonte
+ - Evitar repetições excessivas
+ - Princípio da responsabilidade única
+ - Princípio da Segregação da Interface

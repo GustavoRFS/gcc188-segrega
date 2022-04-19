@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BeforeInsert,
+  BeforeUpdate,
+} from "typeorm";
 
 @Entity()
 export class User {
@@ -16,7 +22,7 @@ export class User {
 
   @Column({
     select: false,
-    nullable: true
+    nullable: true,
   })
   password!: string;
 
@@ -24,19 +30,19 @@ export class User {
   email: string;
 
   @Column({
-    default: 'user'
+    default: "user",
+    enum: ["user", "admin"],
   })
   nivel: string;
 
   @Column({
     nullable: true,
-    select: false
+    select: false,
   })
   registerToken!: string;
 
   @BeforeInsert()
   equalsTotalPoints() {
-    this.totalPoints = this.points
+    this.totalPoints = this.points;
   }
-
 }

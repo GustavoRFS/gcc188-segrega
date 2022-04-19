@@ -15,7 +15,7 @@ const isAdm = true;
 
 const Item = styled(Paper)(() => ({
   textAlign: "center",
-  height: 480,
+  minHeight: 480,
   maxWidth: "90vw",
   lineHeight: "60px",
   display: "flex",
@@ -66,13 +66,17 @@ export function PerfilComponent({
   };
 
   const deleteUser = async () => {
-    await api.delete(`/users/${usuario.id}`);
-    alert('Usuário excluído com sucesso!')
-  }
-  
+    await api().delete(`/users/${usuario.id}`);
+    alert("Usuário excluído com sucesso!");
+  };
+
   return (
     <div>
-      <ModalAdcMoedas onClose={handleClose} open={modalOpened} usuario={usuario}/>
+      <ModalAdcMoedas
+        onClose={handleClose}
+        open={modalOpened}
+        usuario={usuario}
+      />
       <Item elevation={elevation}>
         <Avatar
           alt="Remy Sharp"

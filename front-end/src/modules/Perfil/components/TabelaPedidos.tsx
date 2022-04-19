@@ -1,17 +1,21 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import React from "react";
+import { useEffect, useState } from "react";
 import api from "../../../services/api";
+import { GetUserOrders } from "../../../services/Orders";
+import { Order } from "../../../services/Orders/dto";
 import { getUser } from "../../../services/tokens";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
+import { useAppContext } from "../../../shared/store";
 
 let requested = false;
 export function TabelaPedidos() {
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = useState<Order[]>([] as Order[]);
+  const { state } = useAppContext();
 
   const columns: GridColDef[] = [
     {
-      field: "nome",
+      field: "name",
       headerName: "Produto",
       width: 260,
 
@@ -20,44 +24,46 @@ export function TabelaPedidos() {
           imagem={row.imagem}
           nome={row.nome}
           imagemPadrao="Foto"
-          onClick={() => {
-            
-          }}
+          onClick={() => {}}
         />
       ),
     },
     {
-      field: "preco",
+      field: "orderPrice",
       headerName: "Valor da Compra",
       width: 160,
       headerAlign: "center",
       align: "center",
+
+      renderCell: ({ row }) => <>{row.preco} CPs</>,
     },
     {
-      field: "data",
+      field: "date",
       headerName: "Data da Compra",
       headerAlign: "center",
       align: "center",
       width: 160,
     },
   ];
-  const user:any = getUser();
-  if (rows.length === 0 && !requested) { 
-    api.get(`/orders/${user.uid}`).then((orders: any) => {
-      requested = true;
-      setRows(orders.data.map((o: any) => {
-        return {
-          id: o.id,
-          nome: o.product.name,
-          preco: o.product.price,
-          data: moment(o.date).utc().calendar()
-        }
-      }))
+  const user: any = getUser();
+
+  useEffect(() => {
+    GetUserOrders(state.currentUser.id).then(({ data }) => {
+      setRows(
+        data.map((o: Order) => {
+          return {
+            orderPrice: o.orderPrice,
+            productId: o.productId,
+            userId: o.userId,
+            date: moment(o.date).utc().calendar(),
+          };
+        })
+      );
     });
-  }
+  }, []);
 
   return (
-    <div style={{flex: 1, alignSelf: "flex-start",   }}>
+    <div style={{ flex: 1, alignSelf: "flex-start" }}>
       <DataGrid
         rows={rows}
         columns={columns}

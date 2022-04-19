@@ -1,78 +1,74 @@
-import { useState } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import AddIcon from "@mui/icons-material/Add";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
-import api from "../../../services/api";
-import React from "react";
 import { ModalAddUsuario } from "../../../shared/components/ModalAddUsuario";
+import { GetUsers } from "../../../services/Users";
+import { User } from "../../../services/Users/dto";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export function TabelaMembros() {
-  const addItem = () => {
-
-  }
+  const addItem = () => {};
   const [modalOpened, setModalOpened] = useState(false);
   const [addModalOpened, setAddModalOpened] = useState(false);
-  const [membro, setMembro] = React.useState({});
-  const [rows, setRows] = React.useState([]);
+  const [membro, setMembro] = useState<User>({} as User);
+  const [rows, setRows] = useState<User[]>([] as User[]);
 
-  let currentUser: any = {}
+  let currentUser: any = {};
 
   const handleClose = () => {
-    setMembro({})
+    setMembro({} as User);
     setModalOpened(false);
   };
 
   const handleOpen = () => {
-    setMembro(currentUser)
+    setMembro(currentUser);
     setModalOpened(true);
   };
-  
+
   const handleCloseAddModal = () => {
-    setMembro({})
+    setMembro({} as User);
     setAddModalOpened(false);
   };
 
   const handleOpenAddModal = () => {
-    setMembro(currentUser)
+    setMembro(currentUser);
     setAddModalOpened(true);
   };
-  
-  if (rows.length === 0) {
-    api.get("/users").then((users:any) => {      
-      setRows(users.data.map((u:any) => {
-        return {
-          id: u.id,
-          nome: u.name,
-          email: u.email,
-          moedasRecebidas: u.points,
-          moedasTotais: u.totalPoints,
-          moedasGastas: u.totalPoints - u.points
-        }
-      })) 
-    });
-  }
+
+  const editItem = (user: User) => {
+    console.log(user);
+  };
+
+  const deleteItem = (user: User) => {
+    console.log(user);
+  };
+
+  useEffect(() => {
+    GetUsers()
+      .then(({ data }) => {
+        setRows(data);
+      })
+      .catch(() => {
+        alert("Erro!");
+      });
+  }, []);
 
   const columns: GridColDef[] = [
     {
-      field: "nome",
+      field: "name",
       headerName: "Membro",
       width: 442,
       sortable: true,
       renderCell: ({ row }) => (
         <ImagemENomeTabela
           imagem={row.imagem}
-          nome={row.nome}
+          nome={row.name}
           imagemPadrao="Usuário"
           onClick={() => {
-            currentUser = {
-              id: row.id,
-              name: row.nome,
-              email: row.email,
-              recivedCoins: row.moedasRecebidas,
-              acumulatedCoins: row.moedasTotais,
-              spendedCoins: row.moedasGastas,
-            }            
+            currentUser = row;
             handleOpen();
           }}
         />
@@ -83,19 +79,37 @@ export function TabelaMembros() {
       headerName: "+",
       headerAlign: "center",
       disableColumnMenu: true,
-      width: 30,
+      width: 65,
+
       sortable: false,
+      align: "center",
       renderHeader: () => (
-          <AddIcon
+        <AddIcon
           onClick={() => {
             handleOpenAddModal();
           }}
           style={{ cursor: "pointer" }}
+        />
+      ),
+      renderCell: (params: GridValueGetterParams) => (
+        <div>
+          <EditIcon
+            onClick={() => {
+              editItem(params.row);
+            }}
+            style={{ cursor: "pointer" }}
           />
+          <DeleteIcon
+            onClick={() => {
+              deleteItem(params.row);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       ),
     },
   ];
-  
+
   return (
     <div
       style={{
@@ -105,15 +119,8 @@ export function TabelaMembros() {
         justifyContent: "center",
       }}
     >
-      <ModalUsuario
-        onClose={handleClose}
-        open={modalOpened}
-        usuario={membro}
-      />
-      <ModalAddUsuario
-        onClose={handleCloseAddModal}
-        open={addModalOpened}
-      />
+      <ModalUsuario onClose={handleClose} open={modalOpened} usuario={membro} />
+      <ModalAddUsuario onClose={handleCloseAddModal} open={addModalOpened} />
       <DataGrid
         rows={rows}
         columns={columns}

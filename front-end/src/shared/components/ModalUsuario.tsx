@@ -8,12 +8,11 @@ type ModalUsuarioProps = {
   usuario: any;
 };
 
-export function ModalUsuario({onClose, open, usuario}: ModalUsuarioProps) {
-
+export function ModalUsuario({ onClose, open, usuario }: ModalUsuarioProps) {
   return (
     <div>
       <ModalPadrao onClose={onClose} open={open}>
-          <PerfilComponent  usuario={usuario} elevation={0} onClose={onClose}  />
+        <PerfilComponent usuario={usuario} elevation={0} onClose={onClose} />
       </ModalPadrao>
     </div>
   );
