@@ -65,7 +65,7 @@ export class OrdersController extends Controller {
   @Put("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["user"])
   public async updateOrder(
     @Path() id: number,
     @Body() order: OrderInput
@@ -83,7 +83,7 @@ export class OrdersController extends Controller {
 
   @Delete("/{id}")
   @SuccessResponse("200", "Sucesso")
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["user"])
   @Response("404", "Não encontrado")
   public async deleteOrder(@Path() id: number): Promise<string> {
     const response = await OrdersService.deleteOrder(id);

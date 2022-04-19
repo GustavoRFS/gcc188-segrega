@@ -46,7 +46,7 @@ export class UsersController extends Controller {
   @Get("/{id}")
   @SuccessResponse("200", "Sucesso")
   @Response("404", "Não encontrado")
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["user"])
   @Route("/")
   public async getUserById(@Path() id: number): Promise<UserOutput> {
     const response = await UsersService.getUserById(id);
