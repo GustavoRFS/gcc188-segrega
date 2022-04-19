@@ -3,30 +3,44 @@ import CategoryIcon from "@mui/icons-material/Category";
 import { Button, TextField } from ".";
 import { MouseEventHandler, useState } from "react";
 import { ModalConfirmacao } from "./ModalConfirmacao";
+import { Avatar } from "@mui/material";
+
+import {CreateProduct} from "../../services/Produtos";
+import {useAppContext} from "../store"
 
 type ModalProdutoProps = {
   onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
   open: boolean;
   produto: any;
+  editar?: boolean;
 };
 
-export default function ModalProduto(props: ModalProdutoProps) {
-  const { onClose, open, produto } = props;
-
+export default function ModalProduto( { onClose, open, produto = null, editar = false } : ModalProdutoProps) {
   const [modalConfirmacaoOpened, setModalConfirmacaoOpened] = useState(false);
 
-  const isAdd = !produto;
-  const isAdmin = false; //TODO: Aqui vai ter a verificação
+  const isAdd = Object.keys(produto).length === 0;
+  
+  const { state } = useAppContext();
+  
+  var {nome, preco} = produto;
+  var imagem = `${process.env.REACT_APP_API_URL}/uploads/${produto.image}`;
 
-  let nome = (produto || {}).nome;
-  let preco = (produto || {}).preco;
+  const [image, setimage] = useState(imagem)
+  const [file, setFile] = useState<any>();
 
   function addNewItem() {
-    alert(JSON.stringify({ nome, preco }));
+    console.log({name : nome, price: preco});
+    
+    CreateProduct({name : "alo", price: 10}).then(res => {
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    });
+
   }
 
   function editItem() {
-    alert(JSON.stringify({ nome, preco }));
+
   }
 
   function resgatarItem() {
@@ -63,14 +77,22 @@ export default function ModalProduto(props: ModalProdutoProps) {
             alignItems: "center",
           }}
         >
-          {isAdmin ? (
+          {(state.currentUser.nivel === "admin" && editar)  ? (
             <>
-              <CategoryIcon
-                style={{
-                  fontSize: 175,
-                  marginBottom: 35,
-                }}
+              <Avatar
+                alt="#"
+                src={image}
+                sx={{ width: 150, height: 150 }}
               />
+              <input style={{marginTop: 20, marginBottom: 20}} type={'file'}
+              onChange={(a) => {
+                if (a.target.files && a.target.files[0]) {
+                  setimage(URL.createObjectURL(a.target.files[0]))
+                  setFile(a.target.files[0])
+                }
+              }}
+              ></input>
+              
               <TextField
                 label="Nome do produto"
                 style={{ marginBottom: 20, width: 300 }}
@@ -107,7 +129,7 @@ export default function ModalProduto(props: ModalProdutoProps) {
                     }
                   }}
                 >
-                  Salvar Produto
+                  {isAdd ? "Adicionar" : "Editar"} produto
                 </Button>
               </div>
             </>

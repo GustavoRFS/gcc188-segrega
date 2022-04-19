@@ -9,10 +9,12 @@ import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela"
 import { GetProducts, DeleteProduct } from "../../../services/Produtos";
 import { Product } from "../../../services/Produtos/dto";
 
+
 export function TabelaProdutos() {
   const [open, setOpen] = useState(false);
   const [produto, setProduto] = useState({});
   const [produtos, setProdutos] = useState<Product[]>([]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -43,7 +45,7 @@ export function TabelaProdutos() {
           nome={row.name}
           imagemPadrao="Foto"
           onClick={() => {
-            console.log(row);
+            // console.log(row);
           }}
         />
       ),
@@ -134,6 +136,7 @@ export function TabelaProdutos() {
         }}
         open={open}
         produto={produto}
+        editar={true}
       />
     </div>
   );

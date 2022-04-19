@@ -5,4 +5,9 @@ export type Product = {
   id: number,
 }
 
-  
+export type CreateProductType = {
+  image?: any,
+  price: number,
+  name: string,
+}
+ 

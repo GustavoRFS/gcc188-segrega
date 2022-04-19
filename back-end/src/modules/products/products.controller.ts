@@ -48,7 +48,7 @@ export class ProductsController extends Controller {
   public async createProduct(
     @FormField() name: string,
     @FormField() price: number,
-    @UploadedFile() file?: Express.Multer.File
+    @UploadedFile() file?: any
   ): Promise<ProductOutput> {
     if (file) {
       await saveFile(file.buffer, file.originalname);

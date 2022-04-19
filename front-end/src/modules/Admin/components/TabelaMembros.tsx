@@ -39,11 +39,11 @@ export function TabelaMembros() {
   };
 
   const editItem = (user: User) => {
-    console.log(user);
+    //console.log(user);
   };
 
   const deleteItem = (user: User) => {
-    console.log(user);
+    //console.log(user);
   };
 
   useEffect(() => {
