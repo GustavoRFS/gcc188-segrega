@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ModalProduto from "../../../shared/components/ModalProduto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
-import { GetProducts } from "../../../services/Produtos";
+import { GetProducts, DeleteProduct } from "../../../services/Produtos";
 import { Product } from "../../../services/Produtos/dto";
 
 export function TabelaProdutos() {
@@ -99,8 +99,16 @@ export function TabelaProdutos() {
     handleClickOpen();
   }
 
-  function deleteItem(row: { name: String }): void {
-    alert(row.name);
+  function deleteItem(row: { id: number }): void {
+    DeleteProduct(row.id).then(({ data }) => {
+      GetProducts()
+        .then(({ data }) => {
+          setProdutos(data);
+        })
+        .catch(() => {
+          alert("Erro!");
+        });
+    });
   }
 
   return (
