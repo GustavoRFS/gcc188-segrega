@@ -1,10 +1,21 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import api from "../../../services/api";
+import { GetUserOrders } from "../../../services/Orders";
+import { Order } from "../../../services/Orders/dto";
+import { getUser } from "../../../services/tokens";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
+import { useAppContext } from "../../../shared/store";
 
+let requested = false;
 export function TabelaPedidos() {
+  const [rows, setRows] = useState<Order[]>([] as Order[]);
+  const { state } = useAppContext();
+
   const columns: GridColDef[] = [
     {
-      field: "nome",
+      field: "name",
       headerName: "Produto",
       width: 260,
 
@@ -18,7 +29,7 @@ export function TabelaPedidos() {
       ),
     },
     {
-      field: "preco",
+      field: "orderPrice",
       headerName: "Valor da Compra",
       width: 160,
       headerAlign: "center",
@@ -27,18 +38,30 @@ export function TabelaPedidos() {
       renderCell: ({ row }) => <>{row.preco} CPs</>,
     },
     {
-      field: "data",
+      field: "date",
       headerName: "Data da Compra",
       headerAlign: "center",
       align: "center",
       width: 160,
     },
   ];
-  const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: 900, data: "03/04/2022" },
-    { id: 2, nome: "Amazon Alexa", preco: 1000, data: "07/04/2022" },
-    { id: 3, nome: "Mouse Logitech", preco: 400, data: "01/04/2023" },
-  ];
+  const user: any = getUser();
+
+  useEffect(() => {
+    GetUserOrders(state.currentUser.id).then(({ data }) => {
+      setRows(
+        data.map((o: Order) => {
+          return {
+            orderPrice: o.orderPrice,
+            productId: o.productId,
+            userId: o.userId,
+            date: moment(o.date).utc().calendar(),
+          };
+        })
+      );
+    });
+  }, []);
+
   return (
     <div style={{ flex: 1, alignSelf: "flex-start" }}>
       <DataGrid

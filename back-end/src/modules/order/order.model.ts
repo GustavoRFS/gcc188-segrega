@@ -15,5 +15,5 @@ export class Order {
   orderPrice: number;
 
   @Column()
-  date: Date
+  date: Date;
 }
