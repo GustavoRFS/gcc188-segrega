@@ -1,6 +1,6 @@
 import { ModalPadrao } from "./ModalPadrao";
 import { Button, TextField } from ".";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 import api from "../../services/api";
 import { EditUser } from "../../services/Users";
 
@@ -13,18 +13,17 @@ type ModalAdcMoedasProps = {
 export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
   const { onClose, open } = props;
 
-  let moedas: number = 0;
+  const [moedas, setMoedas] = useState(0);
 
   const addMoedas = async () => {
-    props.usuario.recivedCoins += moedas;
-    props.usuario.acumulatedCoins += moedas;
-    const user = {
+    console.log(props.usuario);
+
+    await EditUser(props.usuario.id, {
       name: props.usuario.name,
       email: props.usuario.email,
-      points: props.usuario.recivedCoins,
-      totalPoints: props.usuario.acumulatedCoins,
-    };
-    await EditUser(props.usuario.id, user);
+      points: props.usuario.points + moedas,
+      totalPoints: props.usuario.totalPoints + moedas,
+    });
     alert("Moedas inseridas com sucesso!");
   };
   return (
@@ -55,8 +54,9 @@ export function ModalAdcMoedas(props: ModalAdcMoedasProps) {
           <TextField
             type="number"
             label="Número de Moedas"
+            defaultValue={`${moedas}`}
             onChange={(m) => {
-              moedas = Number(m.target.value);
+              setMoedas(Number(m.target.value));
             }}
           ></TextField>
           <div

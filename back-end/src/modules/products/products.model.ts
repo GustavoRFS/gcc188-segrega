@@ -18,6 +18,6 @@ export class Product {
   @OneToMany((type) => Order, (order) => order.product)
   orders: Order[];
 
-  @Column()
+  @Column({ nullable: true })
   image?: string;
 }

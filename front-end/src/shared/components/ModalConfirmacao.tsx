@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import { Typography } from "@mui/material";
 import { ModalPadrao } from "./ModalPadrao";
 import { Button } from ".";
@@ -6,7 +6,7 @@ import { Button } from ".";
 type ModalConfirmacaoProps = {
   onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
   open: boolean;
-  textoAcao: string;
+  textoAcao: ReactNode;
   textoConfirmacao: string;
   acao: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 };

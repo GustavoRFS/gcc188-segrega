@@ -1,32 +1,61 @@
 import { ModalPadrao } from "./ModalPadrao";
-import CategoryIcon from "@mui/icons-material/Category";
 import { Button, TextField } from ".";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState, useMemo } from "react";
 import { ModalConfirmacao } from "./ModalConfirmacao";
+import { useAppContext } from "../store";
+import { Product } from "../../services/Produtos/dto";
+import { Typography } from "@mui/material";
+import { CreateProduct, EditProduct } from "../../services/Produtos";
+import { JSONtoFormData } from "../utils/JSONtoFormData";
+import { OrderProduct } from "../../services/Orders";
+import { GetCurrentUser } from "../../services/Users";
 
 type ModalProdutoProps = {
-  onClose: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
+  onClose: Function;
   open: boolean;
-  produto: any;
+  isEditing: boolean;
+  produto?: Product | null;
 };
 
 export default function ModalProduto(props: ModalProdutoProps) {
-  const { onClose, open, produto } = props;
+  const { onClose, open, produto, isEditing } = props;
+  const [produtoForm, setProdutoForm] = useState<Product | null>({} as Product);
+  const { state, dispatch } = useAppContext();
+
+  useEffect(() => {
+    setProdutoForm(produto ? { ...produto } : null);
+  }, [produto]);
+
+  const handleChangeForm = (atributo: string) => (event: any) => {
+    setProdutoForm({ ...produtoForm, [atributo]: event.target.value });
+  };
 
   const [modalConfirmacaoOpened, setModalConfirmacaoOpened] = useState(false);
 
-  const isAdd = !produto;
-  const isAdmin = false; //TODO: Aqui vai ter a verificação
-
-  let nome = (produto || {}).nome;
-  let preco = (produto || {}).preco;
+  const isAdd = useMemo(() => !produto, [produto]);
+  const isAdmin = state.currentUser.nivel === "admin" && isEditing;
 
   function addNewItem() {
-    alert(JSON.stringify({ nome, preco }));
+    const form = JSONtoFormData(produtoForm);
+
+    CreateProduct(form)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(() => {
+        alert("Erro");
+      });
   }
 
   function editItem() {
-    alert(JSON.stringify({ nome, preco }));
+    const form = JSONtoFormData(produtoForm);
+    EditProduct(produtoForm ? produtoForm.id : -1, form)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(() => {
+        alert("Erro");
+      });
   }
 
   function resgatarItem() {
@@ -38,6 +67,8 @@ export default function ModalProduto(props: ModalProdutoProps) {
   };
 
   const abrirModalConfirmacao = () => {
+    console.log(state);
+
     setModalConfirmacaoOpened(true);
   };
 
@@ -46,13 +77,30 @@ export default function ModalProduto(props: ModalProdutoProps) {
       <ModalConfirmacao
         onClose={fecharModalConfirmacao}
         open={modalConfirmacaoOpened}
-        textoAcao="KKKKKK"
+        textoAcao={
+          <p style={{ textAlign: "center" }}>
+            Deseja realmente resgatar o produto {produto?.name}? <br />
+            <br /> Seu saldo restante será{" "}
+            {produto?.price ? state.currentUser.points - produto?.price : ""}
+          </p>
+        }
         textoConfirmacao="Resgatar"
         acao={() => {
-          alert("KKKK");
+          OrderProduct(produto?.id).then(() => {
+            fecharModalConfirmacao();
+            onClose();
+            GetCurrentUser().then(({ data }) => {
+              const { email, id, name, nivel, points, totalPoints } = data;
+
+              dispatch({
+                type: "CURRENT_USER",
+                payload: { id, email, nivel, name, points, totalPoints },
+              });
+            });
+          });
         }}
       />
-      <ModalPadrao onClose={onClose} open={open}>
+      <ModalPadrao onClose={() => onClose()} open={open}>
         <div
           style={{
             width: 520,
@@ -63,36 +111,35 @@ export default function ModalProduto(props: ModalProdutoProps) {
             alignItems: "center",
           }}
         >
+          <img
+            alt={produto?.name}
+            src={`${process.env.REACT_APP_API_URL}/uploads/${produto?.image}`}
+            style={{
+              width: 200,
+              height: 200,
+              marginBottom: 35,
+            }}
+          />
           {isAdmin ? (
             <>
-              <CategoryIcon
-                style={{
-                  fontSize: 175,
-                  marginBottom: 35,
-                }}
-              />
               <TextField
                 label="Nome do produto"
                 style={{ marginBottom: 20, width: 300 }}
-                onChange={(a) => {
-                  nome = a.target.value;
-                }}
-                defaultValue={nome}
+                onChange={handleChangeForm("name")}
+                defaultValue={produtoForm?.name}
               />
               <TextField
                 label="Preço do produto"
                 style={{ marginBottom: 20, width: 300 }}
                 type="number"
-                onChange={(a) => {
-                  preco = a.target.value;
-                }}
-                defaultValue={preco}
+                onChange={handleChangeForm("price")}
+                defaultValue={`${produtoForm?.price}`}
               />
               <div>
                 <Button
                   variant="contained"
                   style={{ backgroundColor: "#2B2D42" }}
-                  onClick={onClose}
+                  onClick={() => onClose()}
                 >
                   Cancelar
                 </Button>
@@ -113,14 +160,20 @@ export default function ModalProduto(props: ModalProdutoProps) {
             </>
           ) : (
             <>
-              <CategoryIcon
-                style={{
-                  fontSize: 175,
-                  marginBottom: 35,
-                }}
-              />
-              <h1 style={{ marginBottom: 0 }}>{nome}</h1>
-              <h2>{preco} CPs</h2>
+              <Typography
+                variant="h1"
+                fontSize={30}
+                style={{ marginBottom: 10 }}
+              >
+                {produto?.name}
+              </Typography>
+              <Typography
+                variant="h1"
+                fontSize={30}
+                style={{ marginBottom: 30 }}
+              >
+                {produto?.price} CPs
+              </Typography>
               <div>
                 <Button
                   variant="contained"

@@ -1,5 +1,9 @@
 import { OrdersRepository } from "./order.repository";
 import { OrderInput, OrderOutput } from "./order.dto";
+import { Order } from "./order.model";
+import jwt from "jsonwebtoken";
+import { ProductsService } from "../products/products.service";
+import { UsersService } from "../user/user.service";
 
 export class OrdersService {
   public static async getOrders(): Promise<OrderOutput[]> {
@@ -15,11 +19,29 @@ export class OrdersService {
   }
 
   public static async createOrder(
-    order: OrderInput
-  ): Promise<OrderOutput> {
+    productId: number,
+    token: string
+  ): Promise<OrderOutput | string> {
+    const userId = jwt.decode(token).id;
+    const { points } = await UsersService.getUserById(userId);
+
+    const { price } = await ProductsService.getProductById(productId);
+
+    if (points < price) {
+      return "Você não tem pontos suficientes para fazer o resgate";
+    }
+
+    const order = {
+      date: new Date(),
+      user: { id: userId },
+      product: { id: productId },
+      orderPrice: price,
+    };
     const {
       raw: [{ id }],
     } = await OrdersRepository.createOrder(order);
+
+    await UsersService.updateUser(userId, { points: points - price });
 
     return await this.getOrderById(id);
   }

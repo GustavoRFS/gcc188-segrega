@@ -11,11 +11,11 @@ import Login from "../modules/Login";
 import ConfirmRegister from "../modules/ConfirmRegister";
 import { Inicio } from "../modules/Inicio";
 import NavBar from "../shared/components/NavBar";
-import api from "../services/api";
 import { useAppContext } from "../shared/store";
 import { Perfil } from "../modules/Perfil";
 import { Admin } from "../modules/Admin";
 import jwtDecode from "jwt-decode";
+import { GetCurrentUser } from "../services/Users";
 
 const AuthRoutes = () => {
   return (
@@ -58,16 +58,24 @@ export default function Routes() {
     dispatch,
     state: { currentUser },
   } = useAppContext();
+
   useEffect(() => {
     const token = getToken();
     if (token) {
-      const { id, email, nivel } = jwtDecode<{
+      const { id } = jwtDecode<{
         id: number;
         email: string;
         nivel: "admin" | "user";
       }>(token);
 
-      dispatch({ type: "CURRENT_USER", payload: { id, email, nivel } });
+      GetCurrentUser().then(({ data }) => {
+        const { email, id, name, nivel, points, totalPoints } = data;
+
+        dispatch({
+          type: "CURRENT_USER",
+          payload: { id, email, nivel, name, points, totalPoints },
+        });
+      });
 
       if (id) {
         history.push("/inicio");

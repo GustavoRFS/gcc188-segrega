@@ -5,6 +5,7 @@ export type User = {
   points: number;
   name: string;
   id: number;
+  position?: number;
 };
 
 export type UserRequest = {

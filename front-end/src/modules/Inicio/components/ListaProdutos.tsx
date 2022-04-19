@@ -1,5 +1,5 @@
 import { ImageList, Typography, Paper } from "@mui/material";
-import { useMemo, useState,useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 // @ts-ignore
 import useDimensions from "react-use-dimensions";
 import ModalProduto from "../../../shared/components/ModalProduto";
@@ -9,11 +9,13 @@ import { Product } from "../../../services/Produtos/dto";
 export function ListaProdutos() {
   const [ref, { width }] = useDimensions();
   const [modalOpened, setModalOpened] = useState(false);
+  const [produtoModal, setProdutoModal] = useState<Product>({} as Product);
   const [produtos, setProdutos] = useState<Product[]>([]);
-  const cardSize = 160;
+  const cardWidth = 150;
+  const imgSize = 136;
 
   const colsAmount = useMemo(() => {
-    let value = Math.floor(width / (cardSize + 2));
+    let value = Math.floor(width / (cardWidth + 2));
 
     if (value === 0) value = 1;
 
@@ -24,7 +26,8 @@ export function ListaProdutos() {
     setModalOpened(false);
   };
 
-  const handleOpen = () => {
+  const handleOpen = (produto: Product) => {
+    setProdutoModal(produto);
     setModalOpened(true);
   };
 
@@ -40,7 +43,12 @@ export function ListaProdutos() {
 
   return (
     <>
-      <ModalProduto onClose={handleClose} open={modalOpened} produto={{}} />
+      <ModalProduto
+        onClose={handleClose}
+        open={modalOpened}
+        isEditing={false}
+        produto={produtoModal}
+      />
       <Paper
         style={{
           display: "flex",
@@ -59,7 +67,7 @@ export function ListaProdutos() {
             <Paper
               style={{
                 height: 230,
-                width: 160,
+                width: cardWidth,
                 alignItems: "center",
                 flexDirection: "column",
                 display: "flex",
@@ -67,10 +75,10 @@ export function ListaProdutos() {
                 marginBottom: 6,
               }}
               key={produto.id}
-              onClick={handleOpen}
+              onClick={() => handleOpen(produto)}
             >
               <img
-                style={{ width: 120, height:180, marginBottom: 14 }}
+                style={{ width: imgSize, height: imgSize, marginBottom: 14 }}
                 src={`${process.env.REACT_APP_API_URL}/uploads/${produto.image}`}
                 alt={produto.name}
                 loading="lazy"
@@ -78,7 +86,7 @@ export function ListaProdutos() {
               <Typography variant="body1" style={{ textAlign: "center" }}>
                 {produto.name}
                 <br />
-                {produto.price}
+                {produto.price} CPs
               </Typography>
             </Paper>
           ))}
