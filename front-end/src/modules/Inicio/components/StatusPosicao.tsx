@@ -31,7 +31,7 @@ export function StatusPosicao({
         alt="Mudança de posição"
         style={{ marginRight: 5, width: 15, height: 15 }}
       />
-      {posicaoAtual}
+      <p>{posicaoAtual}</p>
     </div>
   );
 }

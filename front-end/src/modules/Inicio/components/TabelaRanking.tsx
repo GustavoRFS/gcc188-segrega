@@ -1,41 +1,38 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { StatusPosicao } from "./StatusPosicao";
 import { ModalUsuario } from "../../../shared/components/ModalUsuario";
-import api from "../../../services/api";
+import { GetTopUsers } from "../../../services/Users";
+import { User } from "../../../services/Users/dto";
 
 export function TabelaRanking() {
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = useState<User[]>([] as User[]);
   const [modalOpened, setModalOpened] = useState(false);
-  const [membro, setMembro] = React.useState({});
+  const [membro, setMembro] = useState<User>({} as User);
 
-  let currentUser: any = {}
+  let currentUser: any = {};
 
   const handleClose = () => {
-    setMembro({})
+    setMembro({} as User);
     setModalOpened(false);
   };
 
   const handleOpen = () => {
-    setMembro(currentUser)
+    setMembro(currentUser);
     setModalOpened(true);
   };
 
-  api.get("/users").then((users:any) => {
-    setRows(users.data.map((user:any, index: number) => {
-      return {
-        id: user.id,
-        nome: user.name,
-        email: user.email,
-        moedasRecebidas: user.points,
-        moedasTotais: user.totalPoints,
-        moedasGastas: user.totalPoints - user.points,
-        posicaoAtual: index + 1,
-        posicaoAntiga: index + 1,
-      }
-    }))
-  })
+  useEffect(() => {
+    GetTopUsers()
+      .then(({ data }) => {
+        console.log({ data });
+        setRows(data);
+      })
+      .catch(() => {
+        alert("Erro");
+      });
+  }, []);
 
   const columns: GridColDef[] = [
     {
@@ -45,44 +42,43 @@ export function TabelaRanking() {
       sortable: false,
       headerAlign: "center",
       align: "center",
-      renderCell: ({ row }) => (
-        <StatusPosicao
-          posicaoAtual={row.posicaoAtual}
-          posicaoAntiga={row.posicaoAntiga}
-        />
-      ),
+      renderCell: (cellData) => {
+        console.log(cellData);
+        const { row, id } = cellData;
+
+        return (
+          <StatusPosicao
+            posicaoAtual={Number(id)}
+            posicaoAntiga={row.posicaoAntiga}
+          />
+        );
+      },
     },
     {
-      field: "nome",
+      field: "name",
       headerName: "Membro",
       width: 280,
       sortable: false,
       renderCell: ({ row }) => (
         <ImagemENomeTabela
           imagem={row.imagem}
-          nome={row.nome}
+          nome={row.name}
           imagemPadrao="Usuário"
           onClick={() => {
-            currentUser = {
-              id: row.id,
-              name: row.nome,
-              email: row.email,
-              recivedCoins: row.moedasRecebidas,
-              acumulatedCoins: row.moedasTotais,
-              spendedCoins: row.moedasGastas,
-            }            
+            currentUser = row;
             handleOpen();
           }}
         />
       ),
     },
     {
-      field: "moedasRecebidas",
+      field: "totalPoints",
       headerName: "Moedas Recebidas",
       width: 150,
       headerAlign: "center",
       align: "center",
       sortable: false,
+      renderCell: ({ row }) => <>{row.totalPoints} CPs</>,
     },
   ];
 
@@ -95,11 +91,7 @@ export function TabelaRanking() {
         justifyContent: "center",
       }}
     >
-      <ModalUsuario
-        onClose={handleClose}
-        open={modalOpened}
-        usuario={membro}
-      />
+      <ModalUsuario onClose={handleClose} open={modalOpened} usuario={membro} />
       <DataGrid
         rows={rows}
         columns={columns}

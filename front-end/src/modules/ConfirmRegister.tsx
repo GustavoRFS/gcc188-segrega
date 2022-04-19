@@ -1,27 +1,23 @@
 import { Button, TextField } from "../shared/components";
 import { useHistory, useParams } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
-import { setToken } from "../services/tokens";
-import { useAppContext } from "../shared/store";
-import api from "../services/api";
+import { ConfirmRegister as ConfirmRegisterService } from "../services/Auth/index";
 
 export default function ConfirmRegister() {
   const history = useHistory();
 
-  let registerToken:any = useParams();
-  let password: String;
-  
+  let { registerToken }: any = useParams();
+  let password: string;
+
   const confirm = async () => {
     try {
-      console.log(password, registerToken);
-      
-      await api.post(`/users/confirm-user/${registerToken.registerToken}`, { password });
-      
+      await ConfirmRegisterService(registerToken, password);
+
       history.push("/login");
     } catch (error) {
-      alert('Ocorreu um erro. Tente novamente.')
+      alert("Ocorreu um erro. Tente novamente.");
     }
-  }
+  };
 
   return (
     <div

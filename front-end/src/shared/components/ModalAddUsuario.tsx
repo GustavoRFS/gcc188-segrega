@@ -7,11 +7,11 @@ type ModalUsuarioProps = {
   open: boolean;
 };
 
-export function ModalAddUsuario({onClose, open}: ModalUsuarioProps) {
+export function ModalAddUsuario({ onClose, open }: ModalUsuarioProps) {
   return (
     <div>
       <ModalPadrao onClose={onClose} open={open}>
-          <AddPerfilComponent elevation={0} onClose={onClose}  />
+        <AddPerfilComponent elevation={0} onClose={onClose} />
       </ModalPadrao>
     </div>
   );

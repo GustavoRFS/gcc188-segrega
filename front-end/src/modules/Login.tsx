@@ -3,37 +3,35 @@ import { useHistory } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import { setToken } from "../services/tokens";
 import { useAppContext } from "../shared/store";
-import api from "../services/api";
+import { Login as LoginService } from "../services/Auth";
 
 export default function Login() {
   const history = useHistory();
   const { dispatch } = useAppContext();
 
-  let email: String;
-  let password: String;
+  let email: string;
+  let password: string;
 
   const login = async () => {
     try {
-      // email = "vitoraot@gmail.com"
-      // password = "012345678"
-      const user = await api.post("/users/login", { email, password });
-      
-      setToken(user.data.token, user.data.tokenExpiration)
-      dispatch({
-        type: "CURRENT_USER",
-        payload: {
-          name: user.data.name,
-          //profilePicture: "kkkk",
-          accumulatedCoins: user.data.totalPoints,
-          currentCoins: user.data.points,
-          isAdmin: user.data.nivel === 'admin',
-        },
-      });
+      const { data } = await LoginService(email, password);
+
+      if (data.token) {
+        setToken(data.token, data.tokenExpiration);
+        const { id, email, nivel } = data;
+
+        dispatch({ type: "CURRENT_USER", payload: { id, email, nivel } });
+
+        if (data.id) {
+          history.push("/inicio");
+        }
+      }
+
       history.push("/inicio");
     } catch (error) {
-      alert('Ocorreu um erro. Tente novamente.')
+      alert("Ocorreu um erro. Tente novamente.");
     }
-  }
+  };
 
   return (
     <div

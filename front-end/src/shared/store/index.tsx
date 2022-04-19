@@ -9,11 +9,12 @@ import reducer from "./reducer";
 
 export type AppData = {
   currentUser: {
+    id: number;
     name: string;
     profilePicture: string;
-    accumulatedCoins: number;
-    currentCoins: number;
-    isAdmin: boolean;
+    totalPoints: number;
+    points: number;
+    nivel: "admin" | "user";
   };
 };
 

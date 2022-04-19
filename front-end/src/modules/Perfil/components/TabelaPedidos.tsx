@@ -2,7 +2,6 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
 export function TabelaPedidos() {
-
   const columns: GridColDef[] = [
     {
       field: "nome",
@@ -14,9 +13,7 @@ export function TabelaPedidos() {
           imagem={row.imagem}
           nome={row.nome}
           imagemPadrao="Foto"
-          onClick={() => {
-            
-          }}
+          onClick={() => {}}
         />
       ),
     },
@@ -26,6 +23,8 @@ export function TabelaPedidos() {
       width: 160,
       headerAlign: "center",
       align: "center",
+
+      renderCell: ({ row }) => <>{row.preco} CPs</>,
     },
     {
       field: "data",
@@ -36,12 +35,12 @@ export function TabelaPedidos() {
     },
   ];
   const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: "900 CPs", data: "03/04/2022" },
-    { id: 2, nome: "Amazon Alexa", preco: "1000 CPs", data: "07/04/2022" },
-    { id: 3, nome: "Mouse Logitech", preco: "400 CPs", data: "01/04/2023" },
+    { id: 1, nome: "Amazon Kindle", preco: 900, data: "03/04/2022" },
+    { id: 2, nome: "Amazon Alexa", preco: 1000, data: "07/04/2022" },
+    { id: 3, nome: "Mouse Logitech", preco: 400, data: "01/04/2023" },
   ];
   return (
-    <div style={{flex: 1, alignSelf: "flex-start",   }}>
+    <div style={{ flex: 1, alignSelf: "flex-start" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -50,7 +49,6 @@ export function TabelaPedidos() {
         disableColumnMenu
         autoHeight
       />
-     
     </div>
   );
 }
