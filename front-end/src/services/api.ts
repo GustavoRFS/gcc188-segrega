@@ -3,7 +3,7 @@ import { getToken } from "./tokens";
 
 const api = () =>
   axios.create({
-    baseURL: "http://localhost:5000/api" || process.env.REACT_APP_API_URL,
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
       Authorization: getToken() ? `Bearer ${getToken()}` : "",
     },
