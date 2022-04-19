@@ -8,6 +8,7 @@ export type Order = {
 };
 
 export type OrderResponse = {
+  id: number;
   date: string;
   orderPrice: number;
   product: Product;
