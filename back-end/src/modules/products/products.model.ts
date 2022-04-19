@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  JoinColumn,
+} from "typeorm";
 import { Order } from "../order/order.model";
 
 @Entity()
@@ -16,8 +22,9 @@ export class Product {
   isActive: boolean;
 
   @OneToMany((type) => Order, (order) => order.product)
+  @JoinColumn()
   orders: Order[];
 
-  @Column()
+  @Column({ nullable: true })
   image?: string;
 }

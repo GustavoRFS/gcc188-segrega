@@ -6,7 +6,7 @@ type TextFieldProps = {
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   onSubmit?: FormEventHandler<HTMLDivElement>;
   type?: "number" | "email" | "password";
-  defaultValue?: "String";
+  defaultValue?: string;
   style?: CSSProperties;
 };
 

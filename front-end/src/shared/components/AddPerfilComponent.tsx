@@ -26,6 +26,7 @@ export function AddPerfilComponent({ elevation = 5 }: UserProps) {
   let usuario: UserRequest = {} as UserRequest;
   const inviteUser = () => {
     if (usuario.name && usuario.email && usuario.points) {
+      usuario.totalPoints = usuario.points;
       InviteUser(usuario)
         .then(() => {
           alert("Convite enviado com sucesso!");

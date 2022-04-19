@@ -1,16 +1,12 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import api from "../../../services/api";
-import { GetUserOrders } from "../../../services/Orders";
-import { Order } from "../../../services/Orders/dto";
-import { getUser } from "../../../services/tokens";
+import { OrderResponse } from "../../../services/Orders/dto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { useAppContext } from "../../../shared/store";
 
-let requested = false;
 export function TabelaPedidos() {
-  const [rows, setRows] = useState<Order[]>([] as Order[]);
+  const [rows, setRows] = useState<any>([]);
   const { state } = useAppContext();
 
   const columns: GridColDef[] = [
@@ -21,8 +17,8 @@ export function TabelaPedidos() {
 
       renderCell: ({ row }) => (
         <ImagemENomeTabela
-          imagem={row.imagem}
-          nome={row.nome}
+          imagem={row.image}
+          nome={row.name}
           imagemPadrao="Foto"
           onClick={() => {}}
         />
@@ -35,7 +31,7 @@ export function TabelaPedidos() {
       headerAlign: "center",
       align: "center",
 
-      renderCell: ({ row }) => <>{row.preco} CPs</>,
+      renderCell: ({ row }) => <>{row.orderPrice} CPs</>,
     },
     {
       field: "date",
@@ -45,21 +41,20 @@ export function TabelaPedidos() {
       width: 160,
     },
   ];
-  const user: any = getUser();
 
   useEffect(() => {
-    GetUserOrders(state.currentUser.id).then(({ data }) => {
-      setRows(
-        data.map((o: Order) => {
-          return {
-            orderPrice: o.orderPrice,
-            productId: o.productId,
-            userId: o.userId,
-            date: moment(o.date).utc().calendar(),
-          };
-        })
-      );
-    });
+    setRows(
+      state.currentUser.orders.map((o: OrderResponse, index: number) => {
+        return {
+          id: index,
+          name: o.product.name,
+          orderPrice: o.orderPrice,
+          image: o.product.image,
+          userId: state.currentUser.id,
+          date: moment(o.date).utc().format("DD/MM/YYYY"),
+        };
+      })
+    );
   }, []);
 
   return (

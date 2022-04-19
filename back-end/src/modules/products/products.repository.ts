@@ -7,6 +7,7 @@ export class ProductsRepository {
     const repository: Repository<Product> = getRepository(Product);
     return await repository.find({
       where: { isActive: true },
+      order: { price: "ASC" },
     });
   }
 

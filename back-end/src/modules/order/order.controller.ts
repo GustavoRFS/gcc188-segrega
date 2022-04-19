@@ -10,11 +10,10 @@ import {
   SuccessResponse,
   Delete,
   Security,
+  Header,
 } from "tsoa";
 import { OrdersService } from "./order.service";
-import { OrderInput, OrderOutput } from "./order.dto";
-import { ProductsService } from "../products/products.service";
-import moment from "moment";
+import { OrderInput, OrderOutput, OrderRequest } from "./order.dto";
 
 @Route("orders")
 export class OrdersController extends Controller {
@@ -37,10 +36,6 @@ export class OrdersController extends Controller {
     if (!orders) {
       this.setStatus(404);
     } else {
-      // for (const order of orders) {
-      //   const product = await ProductsService.getProductById(order.productId);
-      //   result.push(Object.assign(order, { product }))
-      // }
       this.setStatus(200);
     }
     return result;
@@ -48,11 +43,19 @@ export class OrdersController extends Controller {
 
   @Post("/")
   @SuccessResponse("200", "Sucesso")
-  @Security("jwt", ["admin"])
-  public async createOrder(@Body() order: OrderInput): Promise<OrderOutput> {
-    const response = await OrdersService.createOrder(
-      Object.assign(order, { date: moment().format() })
-    );
+  @Security("jwt", ["user"])
+  public async createOrder(
+    @Body() order: OrderRequest,
+    @Header() Authorization: string
+  ): Promise<OrderOutput | string> {
+    const token = Authorization.split(" ")[1];
+
+    const response = await OrdersService.createOrder(order.productId, token);
+
+    if (typeof response === "string") {
+      this.setStatus(400);
+      return response;
+    }
 
     this.setStatus(200);
 

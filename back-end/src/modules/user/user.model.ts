@@ -4,6 +4,7 @@ import {
   Column,
   BeforeInsert,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Order } from "../order/order.model";
 
@@ -48,5 +49,6 @@ export class User {
   }
 
   @OneToMany((type) => Order, (order) => order.user)
+  @JoinColumn()
   orders: Order[];
 }

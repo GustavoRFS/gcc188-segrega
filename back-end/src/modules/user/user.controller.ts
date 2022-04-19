@@ -9,7 +9,6 @@ import {
   Response,
   SuccessResponse,
   Delete,
-  Request,
   Security,
 } from "tsoa";
 import { UsersService } from "./user.service";
@@ -26,7 +25,7 @@ import {
 export class UsersController extends Controller {
   @Get()
   @SuccessResponse("200", "Sucesso")
-  // @Security("jwt", ["user"])
+  @Security("jwt", ["user"])
   @Route("/")
   public async getUsers(): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();
@@ -78,7 +77,7 @@ export class UsersController extends Controller {
 
   @Post("/register")
   @SuccessResponse("200", "Sucesso")
-  //@Security("jwt", ["admin"])
+  @Security("jwt", ["admin"])
   public async createUserAndSendMail(
     @Body() user: UserInput
   ): Promise<UserOutput> {

@@ -12,10 +12,10 @@ export type UserConfirmOutput = {
 };
 
 export type UserInput = {
-  name: string;
-  email: string;
-  points: number;
-  totalPoints: number;
+  name?: string;
+  email?: string;
+  points?: number;
+  totalPoints?: number;
 };
 
 export type UserOutput = {

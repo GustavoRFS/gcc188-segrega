@@ -17,7 +17,7 @@ export class OrdersRepository {
     const repository: Repository<Order> = getRepository(Order);
     return await repository.find({
       relations: ["product"],
-      where: { user: { id: userId } },
+      where: { userId: userId },
       order: { date: "DESC" },
     });
   }

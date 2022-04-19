@@ -4,6 +4,7 @@ import {
   Column,
   OneToOne,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Product } from "../products/products.model";
 import { User } from "../user/user.model";
@@ -14,9 +15,11 @@ export class Order {
   id: number;
 
   @ManyToOne((type) => Product, (product) => product.orders)
+  @JoinColumn()
   product: Product;
 
   @ManyToOne((type) => User, (user) => user.orders)
+  @JoinColumn()
   user: User;
 
   @Column()

@@ -4,14 +4,21 @@ import { Button, TextField } from ".";
 import { MouseEventHandler, useState } from "react";
 import { ModalAdcMoedas } from "./ModalAdcMoedas";
 import api from "../../services/api";
+import { useAppContext } from "../store/index";
 
 type UserProps = {
-  usuario: any;
+  usuario: {
+    name: string;
+    email: string;
+    id: number;
+    position?: number;
+    receivedCoins: number;
+    acumulatedCoins: number;
+    spendedCoins: number;
+  };
   elevation?: 0 | 5;
   onClose?: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 };
-
-const isAdm = true;
 
 const Item = styled(Paper)(() => ({
   textAlign: "center",
@@ -56,6 +63,10 @@ export function PerfilComponent({
   onClose,
 }: UserProps) {
   const [modalOpened, setModalOpened] = useState(false);
+
+  const { state } = useAppContext();
+
+  const isAdm = state.currentUser.nivel === "admin";
 
   const handleClose = () => {
     setModalOpened(false);
@@ -112,7 +123,12 @@ export function PerfilComponent({
               fontSize: 24,
             }}
           >
-            <span style={{ color: "rgba(43, 45, 66, 0.7)" }}> 1º </span>
+            {usuario?.position && (
+              <span style={{ color: "rgba(43, 45, 66, 0.7)" }}>
+                {usuario.position}º{" "}
+              </span>
+            )}
+
             {usuario.name}
           </h3>
         )}
@@ -127,7 +143,7 @@ export function PerfilComponent({
         >
           <Box>
             <Titulo>Moedas Recebidas</Titulo>
-            <Pontos>{usuario.recivedCoins} CPS</Pontos>
+            <Pontos>{usuario.receivedCoins} CPS</Pontos>
           </Box>
           <Box>
             <Titulo>Moedas acumuladas</Titulo>

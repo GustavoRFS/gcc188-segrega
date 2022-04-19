@@ -26,8 +26,12 @@ export function TabelaRanking() {
   useEffect(() => {
     GetTopUsers()
       .then(({ data }) => {
-        console.log({ data });
-        setRows(data);
+        setRows(
+          data.map((user, index) => {
+            user.position = index + 1;
+            return user;
+          })
+        );
       })
       .catch(() => {
         alert("Erro");
@@ -43,15 +47,9 @@ export function TabelaRanking() {
       headerAlign: "center",
       align: "center",
       renderCell: (cellData) => {
-        console.log(cellData);
-        const { row, id } = cellData;
+        const { row } = cellData;
 
-        return (
-          <StatusPosicao
-            posicaoAtual={Number(id)}
-            posicaoAntiga={row.posicaoAntiga}
-          />
-        );
+        return <StatusPosicao posicaoAtual={row.position} />;
       },
     },
     {

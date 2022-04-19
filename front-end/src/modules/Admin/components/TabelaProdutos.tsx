@@ -12,7 +12,7 @@ import { Product } from "../../../services/Produtos/dto";
 
 export function TabelaProdutos() {
   const [open, setOpen] = useState(false);
-  const [produto, setProduto] = useState({});
+  const [produto, setProduto] = useState<Product | any>({} as Product);
   const [produtos, setProdutos] = useState<Product[]>([]);
 
   const handleClickOpen = () => {
@@ -20,7 +20,7 @@ export function TabelaProdutos() {
   };
 
   const handleClickClose = () => {
-    setProduto({});
+    setProduto({} as Product);
     setOpen(false);
   };
 
@@ -93,6 +93,7 @@ export function TabelaProdutos() {
   ];
 
   function addItem(): void {
+    setProduto(null);
     handleClickOpen();
   }
 
@@ -134,6 +135,7 @@ export function TabelaProdutos() {
         onClose={() => {
           handleClickClose();
         }}
+        isEditing
         open={open}
         produto={produto}
         editar={true}
