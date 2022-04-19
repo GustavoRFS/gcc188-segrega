@@ -1,15 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  ManyToOne,
+} from "typeorm";
+import { Product } from "../products/products.model";
+import { User } from "../user/user.model";
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  userId: number;
+  @ManyToOne((type) => Product, (product) => product.orders)
+  product: Product;
 
-  @Column()
-  productId: number;
+  @ManyToOne((type) => User, (user) => user.orders)
+  user: User;
 
   @Column()
   orderPrice: number;

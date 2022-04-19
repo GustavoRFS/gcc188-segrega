@@ -1,3 +1,6 @@
+import { Product } from "../products/products.model";
+import { User } from "../user/user.model";
+
 export type OrderInput = {
   userId: number;
   productId: number;
@@ -6,8 +9,8 @@ export type OrderInput = {
 };
 
 export type OrderOutput = {
-  userId: number;
-  productId: number;
+  user: User;
+  product: Product;
   orderPrice: number;
   date: Date;
 };

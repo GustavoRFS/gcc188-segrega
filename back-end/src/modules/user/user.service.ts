@@ -1,11 +1,12 @@
 import { UsersRepository } from "./user.repository";
 import {
-  User,
+  UserEmailOutput,
   UserInput,
   UserLogin,
   UserLoginOutput,
   UserOutput,
 } from "./user.dto";
+import { User } from "./user.model";
 import authConfig from "../../config/auth";
 import urls from "../../config/urls";
 import Mailer from "../../utils/Mailer";
@@ -33,7 +34,7 @@ export class UsersService {
     return await UsersRepository.getUserById(id);
   }
 
-  public static async getUserByEmail(email: string): Promise<UserOutput> {
+  public static async getUserByEmail(email: string): Promise<UserEmailOutput> {
     return await UsersRepository.getUserByEmail(email);
   }
 

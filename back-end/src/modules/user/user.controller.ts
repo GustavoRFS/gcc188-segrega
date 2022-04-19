@@ -26,7 +26,7 @@ import {
 export class UsersController extends Controller {
   @Get()
   @SuccessResponse("200", "Sucesso")
-  @Security("jwt", ["user"])
+  // @Security("jwt", ["user"])
   @Route("/")
   public async getUsers(): Promise<UserOutput[]> {
     const response = await UsersService.getUsers();

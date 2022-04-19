@@ -13,8 +13,8 @@ import {
 } from "tsoa";
 import { OrdersService } from "./order.service";
 import { OrderInput, OrderOutput } from "./order.dto";
-import { ProductsService } from "../products/products.service"
-import moment from 'moment'
+import { ProductsService } from "../products/products.service";
+import moment from "moment";
 
 @Route("orders")
 export class OrdersController extends Controller {
@@ -37,23 +37,22 @@ export class OrdersController extends Controller {
     if (!orders) {
       this.setStatus(404);
     } else {
-      for (const order of orders) {
-        const product = await ProductsService.getProductById(order.productId);
-        result.push(Object.assign(order, { product }))
-      }
+      // for (const order of orders) {
+      //   const product = await ProductsService.getProductById(order.productId);
+      //   result.push(Object.assign(order, { product }))
+      // }
       this.setStatus(200);
     }
     return result;
   }
 
-
   @Post("/")
   @SuccessResponse("200", "Sucesso")
   @Security("jwt", ["admin"])
-  public async createOrder(
-    @Body() order: OrderInput
-  ): Promise<OrderOutput> {
-    const response = await OrdersService.createOrder(Object.assign(order, { date: moment().format() }));
+  public async createOrder(@Body() order: OrderInput): Promise<OrderOutput> {
+    const response = await OrdersService.createOrder(
+      Object.assign(order, { date: moment().format() })
+    );
 
     this.setStatus(200);
 

@@ -5,17 +5,21 @@ import { OrderInput, OrderOutput } from "./order.dto";
 export class OrdersRepository {
   public static async getOrders(): Promise<OrderOutput[]> {
     const repository: Repository<Order> = getRepository(Order);
-    return await repository.find();
+    return await repository.find({ relations: ["product"] });
   }
 
   public static async getOrderById(id: number): Promise<OrderOutput> {
     const repository: Repository<Order> = getRepository(Order);
-    return await repository.findOne({ id });
+    return await repository.findOne({ where: { id }, relations: ["product"] });
   }
 
   public static async getOrderByUserId(userId: number): Promise<OrderOutput[]> {
     const repository: Repository<Order> = getRepository(Order);
-    return await repository.find({ where: { userId }, order: { date: 'DESC' } });
+    return await repository.find({
+      relations: ["product"],
+      where: { user: { id: userId } },
+      order: { date: "DESC" },
+    });
   }
 
   public static async createOrder(order: OrderInput) {

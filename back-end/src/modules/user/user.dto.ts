@@ -9,7 +9,7 @@ export type UserConfirm = {
 
 export type UserConfirmOutput = {
   id: number;
-}
+};
 
 export type UserInput = {
   name: string;
@@ -47,14 +47,3 @@ export type UserLoginOutput = {
   token: string;
   tokenExpiration: number;
 };
-
-export type User = {
-  id: number;
-  name: string;
-  points: number;
-  totalPoints: number;
-  email: string;
-  nivel: string;
-  password: string;
-  registerToken: string;
-}

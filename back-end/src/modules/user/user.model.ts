@@ -3,8 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
-  BeforeUpdate,
+  OneToMany,
 } from "typeorm";
+import { Order } from "../order/order.model";
 
 @Entity()
 export class User {
@@ -45,4 +46,7 @@ export class User {
   equalsTotalPoints() {
     this.totalPoints = this.points;
   }
+
+  @OneToMany((type) => Order, (order) => order.user)
+  orders: Order[];
 }

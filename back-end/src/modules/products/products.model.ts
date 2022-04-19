@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Order } from "../order/order.model";
 
 @Entity()
 export class Product {
@@ -13,6 +14,9 @@ export class Product {
 
   @Column({ default: true, select: false })
   isActive: boolean;
+
+  @OneToMany((type) => Order, (order) => order.product)
+  orders: Order[];
 
   @Column()
   image?: string;

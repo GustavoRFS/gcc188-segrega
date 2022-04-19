@@ -1,6 +1,11 @@
 import { User } from "./user.model";
 import { getRepository, Repository } from "typeorm";
-import { UserEmailOutput, UserInput, UserLoginOutput, UserOutput } from "./user.dto";
+import {
+  UserEmailOutput,
+  UserInput,
+  UserLoginOutput,
+  UserOutput,
+} from "./user.dto";
 
 export class UsersRepository {
   public static async getUsers(search?: any): Promise<UserOutput[]> {
@@ -15,20 +20,25 @@ export class UsersRepository {
 
   public static async getUserByEmail(email: string): Promise<UserEmailOutput> {
     const repository: Repository<User> = getRepository(User);
-    return await repository.findOne({ email }, { select: ['id', 'password', 'email', 'nivel'] });
+    return await repository.findOne(
+      { email },
+      { select: ["id", "password", "email", "nivel"] }
+    );
   }
 
   public static async getUserByToken(registerToken: string): Promise<User> {
     const repository: Repository<User> = getRepository(User);
-    return await repository.findOne({ registerToken }, { select: ['id'] });
+    return await repository.findOne({ registerToken }, { select: ["id"] });
   }
 
-  public static async createUser(user: any) { //todo
+  public static async createUser(user: any) {
+    //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.insert(user);
   }
 
-  public static async updateUser(id: number, user: any) { //todo
+  public static async updateUser(id: number, user: any) {
+    //todo
     const repository: Repository<User> = getRepository(User);
     return await repository.update({ id }, user);
   }
