@@ -1,7 +1,13 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import moment from "moment";
+import React from "react";
+import api from "../../../services/api";
+import { getUser } from "../../../services/tokens";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 
+let requested = false;
 export function TabelaPedidos() {
+  const [rows, setRows] = React.useState([]);
 
   const columns: GridColDef[] = [
     {
@@ -35,11 +41,21 @@ export function TabelaPedidos() {
       width: 160,
     },
   ];
-  const rows = [
-    { id: 1, nome: "Amazon Kindle", preco: "900 CPs", data: "03/04/2022" },
-    { id: 2, nome: "Amazon Alexa", preco: "1000 CPs", data: "07/04/2022" },
-    { id: 3, nome: "Mouse Logitech", preco: "400 CPs", data: "01/04/2023" },
-  ];
+  const user:any = getUser();
+  if (rows.length === 0 && !requested) { 
+    api.get(`/orders/${user.uid}`).then((orders: any) => {
+      requested = true;
+      setRows(orders.data.map((o: any) => {
+        return {
+          id: o.id,
+          nome: o.product.name,
+          preco: o.product.price,
+          data: moment(o.date).utc().calendar()
+        }
+      }))
+    });
+  }
+
   return (
     <div style={{flex: 1, alignSelf: "flex-start",   }}>
       <DataGrid
@@ -50,7 +66,6 @@ export function TabelaPedidos() {
         disableColumnMenu
         autoHeight
       />
-     
     </div>
   );
 }
