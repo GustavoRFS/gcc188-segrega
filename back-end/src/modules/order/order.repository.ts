@@ -28,7 +28,7 @@ export class OrdersRepository {
     return await repository.insert(order);
   }
 
-  public static async updateOrder(id: number, order: OrderInput) {
+  public static async updateOrder(id: number, order: any) {
     const repository: Repository<Order> = getRepository(Order);
     return await repository.update({ id }, order);
   }

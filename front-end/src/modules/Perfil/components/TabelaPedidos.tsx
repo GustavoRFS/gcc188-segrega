@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { OrderResponse } from "../../../services/Orders/dto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { useAppContext } from "../../../shared/store";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeleteOrder, GetUserOrders } from "../../../services/Orders";
+import { DeleteOrder, EditOrder, GetUserOrders } from "../../../services/Orders";
+import { Tooltip } from "@mui/material";
 
 export function TabelaPedidos() {
   const [rows, setRows] = useState<any>([]);
@@ -15,11 +17,21 @@ export function TabelaPedidos() {
     DeleteOrder(row.id).then(({ data }) => {
       GetUserOrders(state.currentUser.id)
         .then(({ data }) => {
-          alert("Produto deletado com sucesso!")
+          alert("Pedido deletado com sucesso!")
         })
         .catch(() => {
           alert("Erro!");
         });
+    });
+  }
+
+  function editItem(row: any): void {            
+    EditOrder(row.id, { userId: state.currentUser.id, orderPrice: row.orderPrice, date: new Date(), productId: row.product.id }).then(({ data }) => {
+      alert("Data do pedido editada com sucesso!")
+      window.location.reload();
+    })
+    .catch(() => {
+      alert("Erro!");
     });
   }
   const columns: GridColDef[] = [
@@ -61,6 +73,14 @@ export function TabelaPedidos() {
       align: "center",
       renderCell: (params: GridValueGetterParams) => (
         <div>
+          <Tooltip title="Atualizar data do pedido para hoje">
+            <EditIcon
+              onClick={() => {
+                editItem(params.row);
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          </Tooltip>
           <DeleteIcon
             onClick={() => {
               deleteItem(params.row);
@@ -83,6 +103,7 @@ export function TabelaPedidos() {
             image: o.product.image,
             userId: state.currentUser.id,
             date: moment(o.date).utc().format("DD/MM/YYYY"),
+            product: o.product
           };
         })
         );

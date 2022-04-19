@@ -50,7 +50,13 @@ export class OrdersService {
     id: number,
     order: OrderInput
   ): Promise<OrderOutput> {
-    const response = await OrdersRepository.updateOrder(id, order);
+    const orderResult = {
+      product: { id: order.productId },
+      user: { id: order.userId },
+      orderPrice: order.orderPrice,
+      date: order.date
+    }
+    const response = await OrdersRepository.updateOrder(id, orderResult);
 
     if (response.affected === 0) {
       return null;
