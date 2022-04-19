@@ -1,14 +1,27 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { OrderResponse } from "../../../services/Orders/dto";
 import { ImagemENomeTabela } from "../../../shared/components/ImagemENomeTabela";
 import { useAppContext } from "../../../shared/store";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { DeleteOrder, GetUserOrders } from "../../../services/Orders";
 
 export function TabelaPedidos() {
   const [rows, setRows] = useState<any>([]);
-  const { state } = useAppContext();
+  const { state } = useAppContext();  
 
+  function deleteItem(row: { id: number }): void {    
+    DeleteOrder(row.id).then(({ data }) => {
+      GetUserOrders(state.currentUser.id)
+        .then(({ data }) => {
+          alert("Produto deletado com sucesso!")
+        })
+        .catch(() => {
+          alert("Erro!");
+        });
+    });
+  }
   const columns: GridColDef[] = [
     {
       field: "name",
@@ -40,21 +53,40 @@ export function TabelaPedidos() {
       align: "center",
       width: 160,
     },
+    {
+      field: "buttons",
+      headerName: " ",
+      width: 160,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params: GridValueGetterParams) => (
+        <div>
+          <DeleteIcon
+            onClick={() => {
+              deleteItem(params.row);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      ),
+    },
   ];
 
   useEffect(() => {
-    setRows(
-      state.currentUser.orders.map((o: OrderResponse, index: number) => {
-        return {
-          id: index,
-          name: o.product.name,
-          orderPrice: o.orderPrice,
-          image: o.product.image,
-          userId: state.currentUser.id,
-          date: moment(o.date).utc().format("DD/MM/YYYY"),
-        };
-      })
-    );
+    if (state.currentUser.orders) {
+      setRows(
+        state.currentUser.orders.map((o: OrderResponse) => {          
+          return {
+            id: o.id,
+            name: o.product.name,
+            orderPrice: o.orderPrice,
+            image: o.product.image,
+            userId: state.currentUser.id,
+            date: moment(o.date).utc().format("DD/MM/YYYY"),
+          };
+        })
+        );
+      }
   }, []);
 
   return (
